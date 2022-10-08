@@ -1,0 +1,27 @@
+.header {
+  background: var(--azul-claro);
+  padding: 10px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+}
+
+.header img {
+  width: 120px;
+  height: 60px;
+  object-fit: contain;
+}
+
+.header .actions {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.header svg {
+  font-size: 25px;
+  color: #fff;
+  cursor: pointer;
+}

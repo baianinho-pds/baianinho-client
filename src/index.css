@@ -1,0 +1,12 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --azul-escuro: #315d9f;
+  --azul-claro: #2595d1;
+  --body: #f8f8f8;
+  --info: #bbbbbb;
+}
