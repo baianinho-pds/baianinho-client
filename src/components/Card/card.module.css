@@ -1,0 +1,26 @@
+.card {
+  width: 100%;
+  border-radius: 10px;
+  padding: 20px;
+  background: #a8a8a833;
+}
+
+.cardHeader {
+  padding-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.cardContent {
+  padding: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cardFooter {
+  display: flex;
+  justify-content: flex-end;
+}
