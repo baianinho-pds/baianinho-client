@@ -1,6 +1,5 @@
-.container {
-  width: 100%;
-  height: 100%;
+main {
+  position: relative;
 }
 
 .containerTable {
@@ -53,6 +52,7 @@
   align-items: center;
   gap: 15px;
   font-family: "Imprima", sans-serif;
+  cursor: pointer;
 }
 
 .containerTable table {
@@ -85,67 +85,4 @@
 .containerTable table td:nth-child(4) {
   width: 40px;
   border: 1px solid rgba(0, 0, 0, 0.2);
-}
-
-.containerCardUser {
-  margin: 30px 20px 0 20px;
-  background-color: var(--info);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 90%;
-  margin: 25px auto 0;
-  border-radius: 6px;
-}
-
-.cardHeader{
-  padding: 10px 0;
-  text-align: center;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-  width: 100%;
-}
-
-form{
- display: flex;
- flex-wrap: wrap;
- padding: 30px 10px;
- justify-content: space-between;
- align-items: center;
- row-gap: 20px;
- width: 720px;
-}
-
-.containerInput{
-  display: flex;
-  flex-direction: column;
-  width: 45%;
-}
-
-.containerInput label{
-  margin-bottom: 10px;
-  color: #222;
-  padding: 5px 0;
-}
-
-.containerInput input, .containerInput select{
-  padding: 10px 15px;
-  width: 100%;
-  border: 1px solid #222;
-  border-radius: 2px;
-}
-
-.cardFooter{
-  padding: 15px 10px;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  width: 720px;
-}
-
-.cardFooter button{
-  color: green;
-  border: 1px solid green;
-  padding: 5px 20px;
-  font-family: 'Imprima';
 }
