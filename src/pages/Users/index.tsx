@@ -2,11 +2,14 @@ import styles from "./users.module.css";
 import { FiEdit2, FiTrash, FiSearch, FiFilter, FiUser } from "react-icons/fi";
 import FormUser from "../../components/FormUser";
 import { useState } from "react";
+import MessageAlert from "../../components/MessageAlert";
 export default function Users() {
   const [modalUserState, setModalUserState] = useState(false);
   const [modalUserActionState, setModalUserAtionState] = useState<
     "edit" | "delete"
   >("edit");
+
+  const [modalMessageAlertState, setModalMessageAlertState] = useState(false);
 
   const handlerShowModalUser = () => {
     setModalUserState(true);
@@ -15,6 +18,7 @@ export default function Users() {
   const handleCloseModalUser = () => {
     setModalUserState(false);
     setModalUserAtionState("edit");
+    setModalMessageAlertState(true);
   };
 
   const handlerRequestDeleteUser = () => {
@@ -126,6 +130,10 @@ export default function Users() {
         isOpen={modalUserState}
         onRequestClose={() => handleCloseModalUser()}
         action={modalUserActionState}
+      />
+      <MessageAlert
+        isOpen={modalMessageAlertState}
+        onRequestClose={() => setModalMessageAlertState(false)}
       />
     </main>
   );
