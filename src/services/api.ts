@@ -8,8 +8,9 @@ export class Api {
     });
   }
 
-  async get(path: string, params: Record<string, string | number>) {
-    return await this.api.get(path, { params });
+  async get(path: string, params?: Record<string, string | number>) {
+    const { data } = await this.api.get(path, { params });
+    return data
   }
 
   async post(path: string, body: Record<string, string | any>) {
