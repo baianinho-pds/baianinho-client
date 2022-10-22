@@ -1,6 +1,16 @@
 import { useState } from "react";
 import styles from "./formUser.module.css";
 import { GrClose } from "react-icons/gr";
+import { Person } from "../../models/person";
+import { PersonService } from "../../services/person";
+
+type AddPerson = Omit<
+  Person,
+  "role_name" | "demission_date" | "sector_name" | "id"
+> & {
+  role_name?: Person.Role;
+  sector_name?: Person.Sector;
+};
 
 interface FormUserProps {
   isOpen: boolean;
@@ -12,41 +22,24 @@ export default function FormUser({
   onRequestClose,
   action,
 }: FormUserProps) {
-  // Usar state ou alguma lib...
-  const [name, setName] = useState("");
-  const [contactPhone, setContactPhone] = useState("");
-  const [ctps, setCpts] = useState("");
-  const [password, setPassword] = useState("");
-  const [admissionDate, setAdmissionDate] = useState("");
-  const [demissionDate, setDemissionDate] = useState("");
-  const [role, setRole] = useState("seller");
-  const [localWork, setLocalWork] = useState("");
-  const [street, setStreet] = useState("");
-  const [neighborhood, setNeighborhood] = useState("");
-  const [city, setCity] = useState("");
-  const [postalCode, setPostalCode] = useState("");
-  const [number, setNumber] = useState(0);
+  const [person, setPerson] = useState<AddPerson>({
+    name: "",
+    cpf: "",
+    contact_phone: "",
+    ctps: "",
+    admission_date: "",
+    street: " ",
+    neighborhood: "",
+    city: "",
+    number: "",
+    postal_code: "",
+  });
 
-  const handlerSubmitFormUser = () => {
-    const payload = {
-      name,
-      contactPhone,
-      ctps,
-      password,
-      admissionDate,
-      demissionDate,
-      role,
-      localWork,
-      street,
-      neighborhood,
-      city,
-      postalCode,
-      number,
-    };
-
-    console.log(payload);
-
-    onRequestClose();
+  const handlerSubmitFormUser = async () => {
+    if (person.role_name && person.sector_name) {
+      await PersonService.addPerson(person);
+      onRequestClose();
+    }
   };
   return (
     <>
@@ -66,8 +59,29 @@ export default function FormUser({
                     name="name"
                     id="name"
                     placeholder="Digite o seu nome completo"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    value={person?.name}
+                    onChange={(e) =>
+                      setPerson((oldPerson) => ({
+                        ...oldPerson,
+                        name: e.target.value,
+                      }))
+                    }
+                  />
+                </div>
+                <div className={styles.containerInput}>
+                  <label htmlFor="name">CPF*</label>
+                  <input
+                    type="text"
+                    name="cpf"
+                    id="cpf"
+                    placeholder="Digite o seu CPF"
+                    value={person?.cpf}
+                    onChange={(e) =>
+                      setPerson((oldPerson) => ({
+                        ...oldPerson,
+                        cpf: e.target.value,
+                      }))
+                    }
                   />
                 </div>
                 <div className={styles.containerInput}>
@@ -77,8 +91,13 @@ export default function FormUser({
                     name="contactPhone"
                     id="contactPhone"
                     placeholder="Digite o seu telefone"
-                    value={contactPhone}
-                    onChange={(e) => setContactPhone(e.target.value)}
+                    value={person?.contact_phone}
+                    onChange={(e) =>
+                      setPerson((oldPerson) => ({
+                        ...oldPerson,
+                        contact_phone: e.target.value,
+                      }))
+                    }
                   />
                 </div>
                 <div className={styles.containerInput}>
@@ -88,19 +107,13 @@ export default function FormUser({
                     name="cpts"
                     id="cpts"
                     placeholder="Digite o número da sua carteira de trabalho"
-                    value={ctps}
-                    onChange={(e) => setCpts(e.target.value)}
-                  />
-                </div>
-                <div className={styles.containerInput}>
-                  <label htmlFor="password">Senha de acesso ao painel*</label>
-                  <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    placeholder="Digite a sua senha"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    value={person?.ctps}
+                    onChange={(e) =>
+                      setPerson((oldPerson) => ({
+                        ...oldPerson,
+                        ctps: e.target.value,
+                      }))
+                    }
                   />
                 </div>
                 <div className={styles.containerInput}>
@@ -110,19 +123,13 @@ export default function FormUser({
                     name="admissionDate"
                     id="admissionDate"
                     placeholder="Digite a data de admissão"
-                    value={admissionDate}
-                    onChange={(e) => setAdmissionDate(e.target.value)}
-                  />
-                </div>
-                <div className={styles.containerInput}>
-                  <label htmlFor="demissionDate">Data de desligamento</label>
-                  <input
-                    type="date"
-                    name="demissionDate"
-                    id="demissionDate"
-                    placeholder="Digite a data de desligamento"
-                    value={demissionDate}
-                    onChange={(e) => setDemissionDate(e.target.value)}
+                    value={person?.admission_date}
+                    onChange={(e) =>
+                      setPerson((oldPerson) => ({
+                        ...oldPerson,
+                        admission_date: e.target.value,
+                      }))
+                    }
                   />
                 </div>
                 <div className={styles.containerInput}>
@@ -130,8 +137,13 @@ export default function FormUser({
                   <select
                     name="role"
                     id="role"
-                    value={role}
-                    onChange={(e) => setRole(e.target.value)}
+                    value={person?.role_name}
+                    onChange={(e) =>
+                      setPerson((oldPerson) => ({
+                        ...oldPerson,
+                        role_name: e.target.value as Person.Role,
+                      }))
+                    }
                   >
                     <option value="">Digite a data de desligamento</option>
                     <option value="admin">Administrador(a)</option>
@@ -139,36 +151,53 @@ export default function FormUser({
                   </select>
                 </div>
                 <div className={styles.containerInput}>
-                  <label htmlFor="localwork">Local/Região de trabalho*</label>
-                  <input
-                    type="text"
-                    name="localwork"
-                    id="localwork"
-                    placeholder="Local/Região de trabalho"
-                    value={localWork}
-                    onChange={(e) => setLocalWork(e.target.value)}
-                  />
+                  <label htmlFor="role">Setor*</label>
+                  <select
+                    name="sector"
+                    id="sector"
+                    value={person?.sector_name}
+                    onChange={(e) =>
+                      setPerson((oldPerson) => ({
+                        ...oldPerson,
+                        sector_name: e.target.value as Person.Sector,
+                      }))
+                    }
+                  >
+                    <option value="">Informe o setor</option>
+                    <option value="internal">Interno(a)</option>
+                    <option value="external">Externo(a)</option>
+                  </select>
                 </div>
                 <div className={styles.containerInput}>
                   <label htmlFor="street">Rua*</label>
                   <input
-                    type="number"
+                    type="text"
                     name="street"
                     id="street"
                     placeholder="Rua"
-                    value={street}
-                    onChange={(e) => setStreet(e.target.value)}
+                    value={person?.street}
+                    onChange={(e) =>
+                      setPerson((oldPerson) => ({
+                        ...oldPerson,
+                        street: e.target.value,
+                      }))
+                    }
                   />
                 </div>
                 <div className={styles.containerInput}>
-                  <label htmlFor="neighborhood">Vizinhança*</label>
+                  <label htmlFor="neighborhood">Bairro*</label>
                   <input
                     type="text"
                     name="neighborhood"
                     id="neighborhood"
                     placeholder="Vizinhança"
-                    value={neighborhood}
-                    onChange={(e) => setNeighborhood(e.target.value)}
+                    value={person?.neighborhood}
+                    onChange={(e) =>
+                      setPerson((oldPerson) => ({
+                        ...oldPerson,
+                        neighborhood: e.target.value,
+                      }))
+                    }
                   />
                 </div>
                 <div className={styles.containerInput}>
@@ -178,8 +207,13 @@ export default function FormUser({
                     name="city"
                     id="city"
                     placeholder="Cidade"
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
+                    value={person?.city}
+                    onChange={(e) =>
+                      setPerson((oldPerson) => ({
+                        ...oldPerson,
+                        city: e.target.value,
+                      }))
+                    }
                   />
                 </div>
                 <div className={styles.containerInput}>
@@ -189,8 +223,13 @@ export default function FormUser({
                     name="number"
                     id="number"
                     placeholder="Número"
-                    value={number}
-                    onChange={(e) => setNumber(Number(e.target.value))}
+                    value={person?.number}
+                    onChange={(e) =>
+                      setPerson((oldPerson) => ({
+                        ...oldPerson,
+                        number: e.target.value,
+                      }))
+                    }
                   />
                 </div>
                 <div className={styles.containerInput}>
@@ -200,8 +239,13 @@ export default function FormUser({
                     name="postalCode"
                     id="postalCode"
                     placeholder="Digite o CEP"
-                    value={postalCode}
-                    onChange={(e) => setPostalCode(e.target.value)}
+                    value={person?.postal_code}
+                    onChange={(e) =>
+                      setPerson((oldPerson) => ({
+                        ...oldPerson,
+                        postal_code: e.target.value,
+                      }))
+                    }
                   />
                 </div>
               </form>
