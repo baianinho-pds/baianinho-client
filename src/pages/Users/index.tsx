@@ -1,8 +1,9 @@
 import styles from "./users.module.css";
 import { FiEdit2, FiTrash, FiSearch, FiFilter, FiUser } from "react-icons/fi";
 import FormUser from "../../components/FormUser";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import MessageAlert from "../../components/MessageAlert";
+import { FindPageResponse, PersonService } from "../../services/person";
 export default function Users() {
   const [modalUserState, setModalUserState] = useState(false);
   const [modalUserActionState, setModalUserAtionState] = useState<
@@ -10,6 +11,7 @@ export default function Users() {
   >("edit");
 
   const [modalMessageAlertState, setModalMessageAlertState] = useState(false);
+  const [personList, setPersonList] = useState<FindPageResponse[]>([]);
 
   const handlerShowModalUser = () => {
     setModalUserState(true);
@@ -25,6 +27,15 @@ export default function Users() {
     setModalUserAtionState("delete");
     setModalUserState(true);
   };
+
+  const fetchPersons = useCallback(async () => {
+    const response = await PersonService.findMany();
+    setPersonList(response.data);
+  }, []);
+
+  useEffect(() => {
+    fetchPersons();
+  }, []);
 
   return (
     <main>
@@ -50,79 +61,21 @@ export default function Users() {
         </div>
         <table className={styles.table}>
           <tbody>
-            <tr>
-              <td>Raquel asjdajsdas</td>
-              <td>(77) 9999-9999</td>
-              <td>
-                <FiEdit2 onClick={() => handlerShowModalUser()} />
-              </td>
-              <td>
-                <FiTrash
-                  color="#ff0000"
-                  onClick={() => handlerRequestDeleteUser()}
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>Raquel asjdajsdas</td>
-              <td>(77) 9999-9999</td>
-              <td>
-                <FiEdit2 />
-              </td>
-              <td>
-                <FiTrash color="#ff0000" />
-              </td>
-            </tr>
-            <tr>
-              <td>Raquel asjdajsdas</td>
-              <td>(77) 9999-9999</td>
-              <td>
-                <FiEdit2 />
-              </td>
-              <td>
-                <FiTrash color="#ff0000" />
-              </td>
-            </tr>
-            <tr>
-              <td>Raquel asjdajsdas</td>
-              <td>(77) 9999-9999</td>
-              <td>
-                <FiEdit2 />
-              </td>
-              <td>
-                <FiTrash color="#ff0000" />
-              </td>
-            </tr>
-            <tr>
-              <td>Raquel asjdajsdas</td>
-              <td>(77) 9999-9999</td>
-              <td>
-                <FiEdit2 />
-              </td>
-              <td>
-                <FiTrash color="#ff0000" />
-              </td>
-            </tr>
-            <tr>
-              <td>Raquel asjdajsdas</td>
-              <td>(77) 9999-9999</td>
-              <td>
-                <FiEdit2 />
-              </td>
-              <td>
-                <FiTrash color="#ff0000" />
-              </td>
-            </tr>
-            <tr>
-              <td>Raquel asjdajsdas</td>
-              <td>(77) 9999-9999</td>
-              <td>
-                <FiEdit2 />
-              </td>
-              <td>
-                <FiTrash color="#ff0000" />
-              </td>
-            </tr>
+            {personList?.map(person => (
+              <tr key={person.id}>
+                <td>{person.name}</td>
+                <td>{person.contact_phone}</td>
+                <td>
+                  <FiEdit2 onClick={() => handlerShowModalUser()} />
+                </td>
+                <td>
+                  <FiTrash
+                    color="#ff0000"
+                    onClick={() => handlerRequestDeleteUser()}
+                  />
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
