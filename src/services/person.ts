@@ -16,4 +16,12 @@ export class PersonService {
   static async findMany(): Promise<Page<FindPageResponse>> {
     return await new Api().get("/person");
   }
+
+  static async findOne(id: number): Promise<Person> {
+    return await new Api().get(`/person/${id}`)
+  }
+
+  static async updatePerson(id: number, person: Omit<Person, 'id'>) {
+    await new Api().put(`/person/${id}`, person)
+  }
 }
