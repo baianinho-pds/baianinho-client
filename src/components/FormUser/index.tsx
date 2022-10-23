@@ -1,28 +1,28 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import styles from "./formUser.module.css";
 import { GrClose } from "react-icons/gr";
 import { Person } from "../../models/person";
 import { PersonService } from "../../services/person";
 
-type AddPerson = Omit<
-  Person,
-  "role_name" | "demission_date" | "sector_name" | "id"
-> & {
+type PersonFormParams = Omit<Person, "role_name" | "sector_name" | "id"> & {
   role_name?: Person.Role;
   sector_name?: Person.Sector;
+  id?: number;
 };
 
 interface FormUserProps {
   isOpen: boolean;
   onRequestClose: () => void;
-  action: "edit" | "delete";
+  action?: "form" | "delete";
+  personId?: number;
 }
 export default function FormUser({
   isOpen,
   onRequestClose,
   action,
+  personId,
 }: FormUserProps) {
-  const [person, setPerson] = useState<AddPerson>({
+  const [person, setPerson] = useState<PersonFormParams>({
     name: "",
     cpf: "",
     contact_phone: "",
@@ -37,10 +37,29 @@ export default function FormUser({
 
   const handlerSubmitFormUser = async () => {
     if (person.role_name && person.sector_name) {
-      await PersonService.addPerson(person);
+      if (person.id) {
+        await PersonService.updatePerson(person.id, person);
+      } else {
+        await PersonService.addPerson(person);
+      }
       onRequestClose();
     }
   };
+
+  const fetchPerson = useCallback(async () => {
+    if (personId) {
+      const fetchedPerson = await PersonService.findOne(personId);
+      setPerson({
+        ...fetchedPerson,
+        admission_date: fetchedPerson.admission_date.split("T")[0],
+        demission_date: fetchedPerson.demission_date?.split("T")[0],
+      });
+    }
+  }, [personId]);
+
+  useEffect(() => {
+    fetchPerson();
+  }, [fetchPerson]);
   return (
     <>
       {isOpen && (
@@ -49,7 +68,7 @@ export default function FormUser({
             <h2>Dados do Usuário</h2>
             <GrClose onClick={() => onRequestClose()} />
           </div>
-          {action === "edit" ? (
+          {action === "form" ? (
             <>
               <form>
                 <div className={styles.containerInput}>
@@ -132,6 +151,24 @@ export default function FormUser({
                     }
                   />
                 </div>
+                {person.id ? (
+                  <div className={styles.containerInput}>
+                    <label htmlFor="demissionDate">Data de demissão</label>
+                    <input
+                      type="date"
+                      name="demissionDate"
+                      id="demissionDate"
+                      placeholder="Digite a data de demissão"
+                      value={person?.demission_date ?? undefined}
+                      onChange={(e) =>
+                        setPerson((oldPerson) => ({
+                          ...oldPerson,
+                          demission_date: e.target.value,
+                        }))
+                      }
+                    />
+                  </div>
+                ) : undefined}
                 <div className={styles.containerInput}>
                   <label htmlFor="role">Cargo atual*</label>
                   <select
@@ -253,7 +290,7 @@ export default function FormUser({
                 <button onClick={() => handlerSubmitFormUser()}>Salvar</button>
               </div>
             </>
-          ) : (
+          ) : action === "delete" ? (
             <>
               <div className={styles.containerUserInfo}>
                 <div className={styles.userInfoCard}>
@@ -296,7 +333,7 @@ export default function FormUser({
                 </button>
               </div>
             </>
-          )}
+          ) : undefined}
         </div>
       )}
     </>

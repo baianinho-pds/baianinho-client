@@ -5,37 +5,20 @@ import { useCallback, useEffect, useState } from "react";
 import MessageAlert from "../../components/MessageAlert";
 import { FindPageResponse, PersonService } from "../../services/person";
 export default function Users() {
-  const [modalUserState, setModalUserState] = useState(false);
-  const [modalUserActionState, setModalUserAtionState] = useState<
-    "edit" | "delete"
-  >("edit");
-
+  const [isFormUserOpen, setIsFormUserOpen] = useState(false);
+  const [personIdToUpdate, setPersonIdToUpdate] = useState<number>();
+  const [isDeleteUserAlertOpen, setIsDeleteUserAlertOpen] = useState(false);
   const [modalMessageAlertState, setModalMessageAlertState] = useState(false);
   const [personList, setPersonList] = useState<FindPageResponse[]>([]);
-
-  const handlerShowModalUser = () => {
-    setModalUserState(true);
-  };
-
-  const handleCloseModalUser = () => {
-    setModalUserState(false);
-    setModalUserAtionState("edit");
-    setModalMessageAlertState(true);
-  };
-
-  const handlerRequestDeleteUser = () => {
-    setModalUserAtionState("delete");
-    setModalUserState(true);
-  };
 
   const fetchPersons = useCallback(async () => {
     const response = await PersonService.findMany();
     setPersonList(response.data);
-  }, []);
+  }, [PersonService]);
 
   useEffect(() => {
     fetchPersons();
-  }, []);
+  }, [fetchPersons]);
 
   return (
     <main>
@@ -53,7 +36,7 @@ export default function Users() {
           </button>
           <button
             className={styles.actionButton}
-            onClick={() => handlerShowModalUser()}
+            onClick={() => setIsFormUserOpen(true)}
           >
             Cadastrar
             <FiUser size={20} />
@@ -61,17 +44,22 @@ export default function Users() {
         </div>
         <table className={styles.table}>
           <tbody>
-            {personList?.map(person => (
+            {personList?.map((person) => (
               <tr key={person.id}>
                 <td>{person.name}</td>
                 <td>{person.contact_phone}</td>
                 <td>
-                  <FiEdit2 onClick={() => handlerShowModalUser()} />
+                  <FiEdit2
+                    onClick={() => {
+                      setIsFormUserOpen(true);
+                      setPersonIdToUpdate(person.id);
+                    }}
+                  />
                 </td>
                 <td>
                   <FiTrash
                     color="#ff0000"
-                    onClick={() => handlerRequestDeleteUser()}
+                    onClick={() => setIsDeleteUserAlertOpen(true)}
                   />
                 </td>
               </tr>
@@ -80,9 +68,16 @@ export default function Users() {
         </table>
       </div>
       <FormUser
-        isOpen={modalUserState}
-        onRequestClose={() => handleCloseModalUser()}
-        action={modalUserActionState}
+        isOpen={isDeleteUserAlertOpen || isFormUserOpen}
+        onRequestClose={() => {
+          setIsFormUserOpen(false);
+          setIsDeleteUserAlertOpen(false);
+          setPersonIdToUpdate(undefined);
+        }}
+        personId={personIdToUpdate}
+        action={
+          isDeleteUserAlertOpen ? "delete" : isFormUserOpen ? "form" : undefined
+        }
       />
       <MessageAlert
         isOpen={modalMessageAlertState}
