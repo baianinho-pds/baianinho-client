@@ -18,7 +18,7 @@ export class Api {
   }
 
   async put(path: string, body: Record<string, string | any>) {
-    return await this.api.put(path, { data: body });
+    return await this.api.put(path, body);
   }
 
   async delete(path: string) {
