@@ -30,10 +30,10 @@ export default function Users() {
             <input type="text" placeholder="Pesquisar" />
             <FiSearch size={20} />
           </form>
-          <button className={styles.actionButton}>
+          {/* <button className={styles.actionButton}>
             Filtrar/Ordenar
             <FiFilter size={20} />
-          </button>
+          </button> */}
           <button
             className={styles.actionButton}
             onClick={() => setIsFormUserOpen(true)}
@@ -47,7 +47,11 @@ export default function Users() {
             {personList?.map((person) => (
               <tr key={person.id}>
                 <td>{person.name}</td>
-                <td>{person.contact_phone}</td>
+                <td>
+                  ({person.contact_phone.substring(0, 2)})
+                  {" " + person.contact_phone.substring(2, 7)}-
+                  {person.contact_phone.substring(7, 11)}
+                </td>
                 <td>
                   <FiEdit2
                     onClick={() => {
@@ -59,7 +63,10 @@ export default function Users() {
                 <td>
                   <FiTrash
                     color="#ff0000"
-                    onClick={() => setIsDeleteUserAlertOpen(true)}
+                    onClick={() => {
+                      setPersonIdToUpdate(person.id);
+                      setIsDeleteUserAlertOpen(true);
+                    }}
                   />
                 </td>
               </tr>
@@ -69,10 +76,14 @@ export default function Users() {
       </div>
       <FormUser
         isOpen={isDeleteUserAlertOpen || isFormUserOpen}
-        onRequestClose={() => {
+        onRequestClose={(requestFetchData) => {
           setIsFormUserOpen(false);
           setIsDeleteUserAlertOpen(false);
           setPersonIdToUpdate(undefined);
+          if (requestFetchData) {
+            fetchPersons();
+            setModalMessageAlertState(true);
+          }
         }}
         personId={personIdToUpdate}
         action={
