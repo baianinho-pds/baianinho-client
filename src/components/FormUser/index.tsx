@@ -12,7 +12,7 @@ type PersonFormParams = Omit<Person, "role_name" | "sector_name" | "id"> & {
 
 interface FormUserProps {
   isOpen: boolean;
-  onRequestClose: () => void;
+  onRequestClose: (requestFetchData?: boolean) => void;
   action?: "form" | "delete";
   personId?: number;
 }
@@ -28,12 +28,27 @@ export default function FormUser({
     contact_phone: "",
     ctps: "",
     admission_date: "",
-    street: " ",
+    street: "",
     neighborhood: "",
     city: "",
     number: "",
     postal_code: "",
   });
+
+  const resetForm = () => {
+    setPerson({
+      name: "",
+      cpf: "",
+      contact_phone: "",
+      ctps: "",
+      admission_date: "",
+      street: "",
+      neighborhood: "",
+      city: "",
+      number: "",
+      postal_code: "",
+    });
+  };
 
   const handlerSubmitFormUser = async () => {
     if (person.role_name && person.sector_name) {
@@ -42,8 +57,17 @@ export default function FormUser({
       } else {
         await PersonService.addPerson(person);
       }
-      onRequestClose();
+      onRequestClose(true);
+      resetForm();
     }
+  };
+
+  const handlerDeleteUser = async () => {
+    if (person.id) {
+      await PersonService.deletePerson(person.id);
+    }
+    onRequestClose(true);
+    resetForm();
   };
 
   const fetchPerson = useCallback(async () => {
@@ -66,7 +90,12 @@ export default function FormUser({
         <div className={styles.containerCardUser}>
           <div className={styles.cardHeader}>
             <h2>Dados do Usuário</h2>
-            <GrClose onClick={() => onRequestClose()} />
+            <GrClose
+              onClick={() => {
+                onRequestClose(false);
+                resetForm();
+              }}
+            />
           </div>
           {action === "form" ? (
             <>
@@ -211,7 +240,7 @@ export default function FormUser({
                     type="text"
                     name="street"
                     id="street"
-                    placeholder="Rua"
+                    placeholder="Digite o nome da rua"
                     value={person?.street}
                     onChange={(e) =>
                       setPerson((oldPerson) => ({
@@ -227,7 +256,7 @@ export default function FormUser({
                     type="text"
                     name="neighborhood"
                     id="neighborhood"
-                    placeholder="Vizinhança"
+                    placeholder="Digite o nome do bairro"
                     value={person?.neighborhood}
                     onChange={(e) =>
                       setPerson((oldPerson) => ({
@@ -243,7 +272,7 @@ export default function FormUser({
                     type="text"
                     name="city"
                     id="city"
-                    placeholder="Cidade"
+                    placeholder="DIgite o nome da cidade"
                     value={person?.city}
                     onChange={(e) =>
                       setPerson((oldPerson) => ({
@@ -259,7 +288,7 @@ export default function FormUser({
                     type="number"
                     name="number"
                     id="number"
-                    placeholder="Número"
+                    placeholder="Digite o número"
                     value={person?.number}
                     onChange={(e) =>
                       setPerson((oldPerson) => ({
@@ -296,37 +325,67 @@ export default function FormUser({
                 <div className={styles.userInfoCard}>
                   <div className={styles.UserInfo}>
                     <b>Nome Completo: </b>
-                    <span>Robin Scherbatsky</span>
+                    <span>{person.name}</span>
+                  </div>
+
+                  <div className={styles.UserInfo}>
+                    <b>CPF: </b>
+                    <span>{person.cpf}</span>
                   </div>
 
                   <div className={styles.UserInfo}>
                     <b>Data de Admissão: </b>
-                    <span>20/10/2022</span>
+                    <span>
+                      {/* {new Intl.DateTimeFormat("pt-BR", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                      }).format(new Date(person.admission_date))} */}
+                      {person.admission_date}
+                    </span>
                   </div>
+
+                  {person.demission_date ? (
+                    <div className={styles.UserInfo}>
+                      <b>Data de Demissão: </b>
+                      <span>
+                        {/* {new Intl.DateTimeFormat("pt-BR", {
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "numeric",
+                        }).format(new Date(person?.demission_date))} */}
+                        {person.demission_date}
+                      </span>
+                    </div>
+                  ) : null}
 
                   <div className={styles.UserInfo}>
                     <b>Cargo Atual: </b>
-                    <span>Vendedora</span>
+                    <span>{person.role_name}</span>
                   </div>
 
                   <div className={styles.UserInfo}>
-                    <b>Contato: </b>
-                    <span>(77) 9999-9999</span>
+                    <b>CTPS: </b>
+                    <span>{person.ctps}</span>
                   </div>
                 </div>
               </div>
               <p className={styles.messageAlert}>
-                Você tem certeza que deseja excluir o cadastro do cliente acima?
+                Você tem certeza que deseja excluir o cadastro do usuário
+                {" " + person.name + " ?"}
               </p>
               <div className={styles.cardFooterUserDelete}>
                 <button
-                  onClick={() => handlerSubmitFormUser()}
+                  onClick={() => handlerDeleteUser()}
                   className={styles.btnDelete}
                 >
                   Sim Excluir
                 </button>
                 <button
-                  onClick={() => handlerSubmitFormUser()}
+                  onClick={() => {
+                    onRequestClose(false);
+                    resetForm();
+                  }}
                   className={styles.btnCancel}
                 >
                   Cancelar
