@@ -2,6 +2,29 @@ main {
   position: relative;
 }
 
+.containerLoading {
+  width: 100%;
+  height: 70vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loader {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: 6px solid var(--info);
+  border-top: 6px solid var(--azul-claro);
+  animation: spinner 1s infinite;
+}
+
+@keyframes spinner {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
 .containerTable {
   margin-top: 30px;
   padding: 0 20px;
