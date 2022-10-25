@@ -3,6 +3,14 @@ import styles from "./formUser.module.css";
 import { GrClose } from "react-icons/gr";
 import { Person } from "../../models/person";
 import { PersonService } from "../../services/person";
+import ReactInputMask from "react-input-mask";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+const PersonRolesTranslated = {
+  admin: "Administrador(a)",
+  seller: "Vendedor(a)",
+};
 
 type PersonFormParams = Omit<Person, "role_name" | "sector_name" | "id"> & {
   role_name?: Person.Role;
@@ -51,23 +59,45 @@ export default function FormUser({
   };
 
   const handlerSubmitFormUser = async () => {
-    if (person.role_name && person.sector_name) {
-      if (person.id) {
-        await PersonService.updatePerson(person.id, person);
-      } else {
-        await PersonService.addPerson(person);
+    try {
+      if (person.role_name && person.sector_name) {
+        if (person.id) {
+          await PersonService.updatePerson(person.id, {
+            ...person,
+            cpf: person.cpf.replace(/[. - _ --]/g, ""),
+            contact_phone: person.contact_phone.replace(/[() - _ --]/g, ""),
+            postal_code: person.postal_code.replace(/[- _ --]/g, ""),
+          });
+        } else {
+          await PersonService.addPerson({
+            ...person,
+            cpf: person.cpf.replace(/[. - _ --]/g, ""),
+            contact_phone: person.contact_phone.replace(/[() - _ --]/g, ""),
+            postal_code: person.postal_code.replace(/[- _ --]/g, ""),
+          });
+        }
+        onRequestClose(true);
+        resetForm();
       }
-      onRequestClose(true);
-      resetForm();
+    } catch (error) {
+      toast.error("Verifique todos os campos ou tente novamente mais tarde", {
+        theme: "colored",
+      });
     }
   };
 
   const handlerDeleteUser = async () => {
-    if (person.id) {
-      await PersonService.deletePerson(person.id);
+    try {
+      if (person.id) {
+        await PersonService.deletePerson(person.id);
+      }
+      onRequestClose(true);
+      resetForm();
+    } catch (error) {
+      toast.error("Erro ao excluir usuário, tente novamente", {
+        theme: "colored",
+      });
     }
-    onRequestClose(true);
-    resetForm();
   };
 
   const fetchPerson = useCallback(async () => {
@@ -86,6 +116,7 @@ export default function FormUser({
   }, [fetchPerson]);
   return (
     <>
+      <ToastContainer />
       {isOpen && (
         <div className={styles.containerCardUser}>
           <div className={styles.cardHeader}>
@@ -118,7 +149,8 @@ export default function FormUser({
                 </div>
                 <div className={styles.containerInput}>
                   <label htmlFor="name">CPF*</label>
-                  <input
+                  <ReactInputMask
+                    mask="999.999.999-99"
                     type="text"
                     name="cpf"
                     id="cpf"
@@ -134,7 +166,8 @@ export default function FormUser({
                 </div>
                 <div className={styles.containerInput}>
                   <label htmlFor="contactPhone">Telefone do colaborador*</label>
-                  <input
+                  <ReactInputMask
+                    mask="(99) 99999-9999"
                     type="tel"
                     name="contactPhone"
                     id="contactPhone"
@@ -155,6 +188,8 @@ export default function FormUser({
                     name="cpts"
                     id="cpts"
                     placeholder="Digite o número da sua carteira de trabalho"
+                    minLength={8}
+                    maxLength={8}
                     value={person?.ctps}
                     onChange={(e) =>
                       setPerson((oldPerson) => ({
@@ -300,7 +335,8 @@ export default function FormUser({
                 </div>
                 <div className={styles.containerInput}>
                   <label htmlFor="postalCode">CEP*</label>
-                  <input
+                  <ReactInputMask
+                    mask="99999-999"
                     type="text"
                     name="postalCode"
                     id="postalCode"
@@ -330,18 +366,24 @@ export default function FormUser({
 
                   <div className={styles.UserInfo}>
                     <b>CPF: </b>
-                    <span>{person.cpf}</span>
+                    <span>
+                      {person.cpf.replace(
+                        /(\d{3})(\d{3})(\d{3})(\d{2})/,
+                        "$1.$2.$3-$4"
+                      )}
+                    </span>
                   </div>
 
                   <div className={styles.UserInfo}>
                     <b>Data de Admissão: </b>
                     <span>
-                      {/* {new Intl.DateTimeFormat("pt-BR", {
-                        day: "2-digit",
-                        month: "2-digit",
-                        year: "numeric",
-                      }).format(new Date(person.admission_date))} */}
-                      {person.admission_date}
+                      {person.admission_date
+                        ? new Intl.DateTimeFormat("pt-BR", {
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "numeric",
+                          }).format(new Date(person.admission_date))
+                        : person.admission_date}
                     </span>
                   </div>
 
@@ -349,19 +391,24 @@ export default function FormUser({
                     <div className={styles.UserInfo}>
                       <b>Data de Demissão: </b>
                       <span>
-                        {/* {new Intl.DateTimeFormat("pt-BR", {
-                          day: "2-digit",
-                          month: "2-digit",
-                          year: "numeric",
-                        }).format(new Date(person?.demission_date))} */}
-                        {person.demission_date}
+                        {person.demission_date
+                          ? new Intl.DateTimeFormat("pt-BR", {
+                              day: "2-digit",
+                              month: "2-digit",
+                              year: "numeric",
+                            }).format(new Date(person?.demission_date))
+                          : person.demission_date}
                       </span>
                     </div>
                   ) : null}
 
                   <div className={styles.UserInfo}>
                     <b>Cargo Atual: </b>
-                    <span>{person.role_name}</span>
+                    <span>
+                      {person.role_name
+                        ? PersonRolesTranslated[person.role_name]
+                        : "Não preenchido"}
+                    </span>
                   </div>
 
                   <div className={styles.UserInfo}>
