@@ -1,0 +1,52 @@
+.containerTable {
+  margin-top: 30px;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.actions {
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.search {
+  flex: 1;
+  height: 35px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  border-radius: 8px;
+}
+
+.search input {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+}
+
+.search input::placeholder {
+  font-family: "Imprima", sans-serif;
+  font-size: 16px;
+}
+
+.actionButton {
+  padding: 10px 15px;
+  width: 200px;
+  height: 35px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  font-family: "Imprima", sans-serif;
+  cursor: pointer;
+}
