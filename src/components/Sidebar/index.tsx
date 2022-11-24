@@ -38,6 +38,11 @@ export default function Sidebar() {
             <AiOutlineShoppingCart /> Estoque
           </Link>
         </li>
+        <li>
+          <Link to="/materia-prima">
+            <AiOutlineShoppingCart /> Materia Prima
+          </Link>
+        </li>
       </ul>
     </nav>
   );
