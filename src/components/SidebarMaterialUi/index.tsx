@@ -1,6 +1,7 @@
 import { Drawer, List } from "@mui/material";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { FiHome, FiUser, FiUsers } from "react-icons/fi";
+import { GiWheat } from "react-icons/gi";
 import { MdAttachMoney } from "react-icons/md";
 import { RiMoneyDollarCircleLine } from "react-icons/ri";
 import colorConfigs from "../../configs/colorConfigs";
@@ -42,7 +43,8 @@ const SidebarMaterialUi = () => {
       linkPage: "",
       children: [
         {
-          titlePage: "Materia-Prima",
+          iconPage: <GiWheat />,
+          titlePage: "Matéria-Prima",
           linkPage: "materia-prima",
         },
       ],
