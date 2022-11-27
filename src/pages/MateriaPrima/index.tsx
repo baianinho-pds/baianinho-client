@@ -5,6 +5,13 @@ import FormMateriaPrima from "../../components/FormMateriaPrima";
 
 export default function MateriaPrima() {
   const [isFormMateriaPrimaOpen, setIsFormMateriaPrimaOpen] = useState(false);
+  const [listaMateriaPrima, setListaMateriaPrima] = useState([]);
+
+  function abrirFormulario() {
+    console.log(listaMateriaPrima);
+    setIsFormMateriaPrimaOpen(true);
+  }
+
   return (
     <>
       <main>
@@ -21,7 +28,7 @@ export default function MateriaPrima() {
 
                 <button
                   className={styles.actionButton}
-                  onClick={() => setIsFormMateriaPrimaOpen(true)}
+                  onClick={() => abrirFormulario()}
                 >
                   Cadastrar
                   <FiUser size={20} />
@@ -81,6 +88,7 @@ export default function MateriaPrima() {
         )}
 
         <FormMateriaPrima
+          setListaMateriaPrima={setListaMateriaPrima}
           isOpen={isFormMateriaPrimaOpen}
           closeForm={() => setIsFormMateriaPrimaOpen(false)}
         />

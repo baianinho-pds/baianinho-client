@@ -5,6 +5,7 @@ import styles from "./formMateriaPrima.module.css";
 type FormMateriaPrimaProps = {
   isOpen: boolean;
   closeForm: () => void;
+  setListaMateriaPrima: (a: any) => void;
 };
 
 type MateriaPrima = {
@@ -14,7 +15,11 @@ type MateriaPrima = {
   unidade_medida: any;
 };
 
-function FormMateriaPrima({ isOpen, closeForm }: FormMateriaPrimaProps) {
+function FormMateriaPrima({
+  isOpen,
+  closeForm,
+  setListaMateriaPrima,
+}: FormMateriaPrimaProps) {
   const [materiaPrima, setMateriaPrima] = useState<MateriaPrima>({
     nome: "",
     validade: "",
@@ -23,6 +28,10 @@ function FormMateriaPrima({ isOpen, closeForm }: FormMateriaPrimaProps) {
   });
 
   function SalvarMateriaPrima() {
+    setListaMateriaPrima((oldListaMateriaPrima: any) => [
+      ...oldListaMateriaPrima,
+      materiaPrima,
+    ]);
     console.log("Matéria-Prima: ", materiaPrima);
   }
 
