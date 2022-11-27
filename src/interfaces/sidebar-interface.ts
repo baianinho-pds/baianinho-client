@@ -10,4 +10,5 @@ export type ItemWithChildren = {
 export type ItemWithoutChildren = {
   titlePage: string;
   linkPage: string;
+  iconPage?: ReactNode;
 };
