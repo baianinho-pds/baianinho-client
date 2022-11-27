@@ -50,3 +50,39 @@
   font-family: "Imprima", sans-serif;
   cursor: pointer;
 }
+
+.containerTable table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+}
+
+.containerTable table tr {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.containerTable table tr:nth-child(even) {
+  background-color: #a8a8a833;
+}
+
+.containerTable table tr:nth-child(odd) {
+  background-color: var(--info);
+}
+
+.containerTable table td {
+  padding: 5px 10px;
+}
+
+.containerTable table td:nth-child(2) {
+  width: 150px;
+}
+
+.containerTable table td:nth-child(3),
+.containerTable table td:nth-child(4) {
+  width: 40px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.containerTable table td svg {
+  cursor: pointer;
+}
