@@ -2,10 +2,11 @@ import styles from "./materiaPrima.module.css";
 import { FiEdit2, FiTrash, FiSearch, FiUser } from "react-icons/fi";
 import { useState } from "react";
 import FormMateriaPrima from "../../components/FormMateriaPrima";
+import { MateriaPrimaModel } from "../../interfaces/materia-prima-interface";
 
 export default function MateriaPrima() {
   const [isFormMateriaPrimaOpen, setIsFormMateriaPrimaOpen] = useState(false);
-  const [listaMateriaPrima, setListaMateriaPrima] = useState([]);
+  const [listaMateriaPrima, setListaMateriaPrima] = useState<MateriaPrimaModel[]>([]);
 
   function abrirFormulario() {
     console.log(listaMateriaPrima);
@@ -37,50 +38,19 @@ export default function MateriaPrima() {
 
               <div>
                 <table className={styles.table}>
-                  <tr>
-                    <td>ID 145128</td>
-                    <td>Manteiga</td>
-                    <td>Validade</td>
-                    <td>
-                      <FiEdit2></FiEdit2>
-                    </td>
-                    <td>
-                      <FiTrash color="#ff0000"></FiTrash>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>ID 235121</td>
-                    <td>Farinha de Trigo</td>
-                    <td>Validade</td>
-                    <td>
-                      <FiEdit2></FiEdit2>
-                    </td>
-                    <td>
-                      <FiTrash color="#ff0000"></FiTrash>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>ID 874569</td>
-                    <td>Leite</td>
-                    <td>Validade</td>
-                    <td>
-                      <FiEdit2></FiEdit2>
-                    </td>
-                    <td>
-                      <FiTrash color="#ff0000"></FiTrash>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>ID 101012</td>
-                    <td>Embalagem Biscoito Pallito</td>
-                    <td>Validade</td>
-                    <td>
-                      <FiEdit2></FiEdit2>
-                    </td>
-                    <td>
-                      <FiTrash color="#ff0000"></FiTrash>
-                    </td>
-                  </tr>
+                  {listaMateriaPrima.map((materiaPrima) => (
+                    <tr>
+                      <td>ID {materiaPrima.id}</td>
+                      <td>{materiaPrima.nome}</td>
+                      <td>{materiaPrima.validade}</td>
+                      <td>
+                        <FiEdit2></FiEdit2>
+                      </td>
+                      <td>
+                        <FiTrash color="#ff0000"></FiTrash>
+                      </td>
+                    </tr>
+                  ))}
                 </table>
               </div>
             </div>
