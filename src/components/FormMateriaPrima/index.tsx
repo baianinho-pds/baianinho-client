@@ -1,18 +1,12 @@
 import { useState } from "react";
 import { GrClose } from "react-icons/gr";
+import { MateriaPrimaModel } from "../../interfaces/materia-prima-interface";
 import styles from "./formMateriaPrima.module.css";
 
 type FormMateriaPrimaProps = {
   isOpen: boolean;
   closeForm: () => void;
-  setListaMateriaPrima: (a: any) => void;
-};
-
-type MateriaPrima = {
-  nome: any;
-  validade: any;
-  fornecedor: any;
-  unidade_medida: any;
+  setListaMateriaPrima: React.Dispatch<React.SetStateAction<MateriaPrimaModel[]>>
 };
 
 function FormMateriaPrima({
@@ -20,7 +14,7 @@ function FormMateriaPrima({
   closeForm,
   setListaMateriaPrima,
 }: FormMateriaPrimaProps) {
-  const [materiaPrima, setMateriaPrima] = useState<MateriaPrima>({
+  const [materiaPrima, setMateriaPrima] = useState<MateriaPrimaModel>({
     nome: "",
     validade: "",
     fornecedor: "",
@@ -28,10 +22,19 @@ function FormMateriaPrima({
   });
 
   function SalvarMateriaPrima() {
-    setListaMateriaPrima((oldListaMateriaPrima: any) => [
+    setListaMateriaPrima((oldListaMateriaPrima: MateriaPrimaModel[]) => [
       ...oldListaMateriaPrima,
       materiaPrima,
     ]);
+
+    setMateriaPrima({
+      nome: "",
+      validade: "",
+      fornecedor: "",
+      unidade_medida: "",
+    })
+
+    closeForm()
     console.log("Matéria-Prima: ", materiaPrima);
   }
 
