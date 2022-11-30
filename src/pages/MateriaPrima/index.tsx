@@ -6,11 +6,25 @@ import { MateriaPrimaModel } from "../../interfaces/materia-prima-interface";
 
 export default function MateriaPrima() {
   const [isFormMateriaPrimaOpen, setIsFormMateriaPrimaOpen] = useState(false);
+  const [isDeleteMateriaPrimaAlertOpen, setIsDeleteMateriaPrimaAlertOpen] = useState(false);
   const [listaMateriaPrima, setListaMateriaPrima] = useState<MateriaPrimaModel[]>([]);
+  const [materiaPrimaSelecionada, setMateriaPrimaSelecionada] = useState<MateriaPrimaModel>({
+    fornecedor: '',
+    nome: '',
+    unidade_medida: '',
+    validade: ''
+  })
 
   function abrirFormulario() {
     console.log(listaMateriaPrima);
     setIsFormMateriaPrimaOpen(true);
+  }
+
+  function selecionarMateriaPrima(materiaPrima: MateriaPrimaModel, action: 'deletar' | 'editar') {
+    if(action === 'deletar') {
+      setIsDeleteMateriaPrimaAlertOpen(true)
+      setMateriaPrimaSelecionada(materiaPrima)
+    }
   }
 
   return (
@@ -39,7 +53,7 @@ export default function MateriaPrima() {
               <div>
                 <table className={styles.table}>
                   {listaMateriaPrima.map((materiaPrima) => (
-                    <tr>
+                    <tr key={materiaPrima.id}>
                       <td>ID {materiaPrima.id}</td>
                       <td>{materiaPrima.nome}</td>
                       <td>{materiaPrima.validade}</td>
@@ -47,7 +61,7 @@ export default function MateriaPrima() {
                         <FiEdit2></FiEdit2>
                       </td>
                       <td>
-                        <FiTrash color="#ff0000"></FiTrash>
+                        <FiTrash onClick={() => selecionarMateriaPrima(materiaPrima, 'deletar')} color="#ff0000"></FiTrash>
                       </td>
                     </tr>
                   ))}
@@ -59,8 +73,16 @@ export default function MateriaPrima() {
 
         <FormMateriaPrima
           setListaMateriaPrima={setListaMateriaPrima}
-          isOpen={isFormMateriaPrimaOpen}
+          isOpen={isFormMateriaPrimaOpen || isDeleteMateriaPrimaAlertOpen}
           closeForm={() => setIsFormMateriaPrimaOpen(false)}
+          action={
+            isDeleteMateriaPrimaAlertOpen 
+              ? 'delete' 
+              : isFormMateriaPrimaOpen 
+              ? 'form' 
+              : undefined
+          }
+          materiaPrimaProp={materiaPrimaSelecionada}
         />
       </main>
     </>

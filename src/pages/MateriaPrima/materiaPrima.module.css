@@ -86,3 +86,53 @@
 .containerTable table td svg {
   cursor: pointer;
 }
+
+.containerMateriaPrimaInfo {
+  width: 100%;
+  padding: 30px 10px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.materiaPrimaInfoCard {
+  background: #fff;
+  width: 95%;
+  padding: 80px 10px;
+  border: 1px solid #222;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.cardFooterMateriaPrimaDelete {
+  padding: 0 30px 10px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.messageAlert {
+  padding: 15px 0 10px;
+  color: red;
+}
+
+.cardFooterMateriaPrimaDelete .btnDelete {
+  border: 1px solid red;
+  color: red;
+}
+
+.cardFooterMateriaPrimaDelete .btnDelete:hover {
+  background: red;
+  color: #fff;
+}
+
+.cardFooterMateriaPrimaDelete .btnCancel {
+  border: 1px solid #222;
+  color: #222;
+}
