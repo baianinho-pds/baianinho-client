@@ -97,7 +97,7 @@ export default function FormProdutos({
     <>
       <ToastContainer />
       {isOpen && (
-        <div className={styles.containerCardUser}>
+        <div className={styles.containerCardProducts}>
           <div className={styles.cardHeader}>
             <h2>Dados do Produto</h2>
             <GrClose
@@ -195,25 +195,25 @@ export default function FormProdutos({
                   />
                 </div>
               </form>
-              {/* <div className={styles.cardFooter}>
-                <button onClick={() => handlerSubmitFormUser()}>Salvar</button>
-              </div> */}
+              <div className={styles.cardFooter}>
+                <button>Salvar</button>
+              </div>
             </>
           ) : action === "delete" ? (
             <>
-              <div className={styles.containerUserInfo}>
-                <div className={styles.userInfoCard}>
+              <div className={styles.containerProductsInfo}>
+                <div className={styles.productInfoCard}>
                   <div className={styles.UserInfo}>
                     <b>Nome do Produto: </b>
                     <span>{product.name}</span>
                   </div>
 
-                  <div className={styles.UserInfo}>
+                  <div>
                     <b>Lote do Produto: </b>
                     <span>{product.loteNumber}</span>
                   </div>
 
-                  <div className={styles.UserInfo}>
+                  <div>
                     <b>Data de Fabricação: </b>
                     <span>
                       {product.created_at
@@ -227,7 +227,7 @@ export default function FormProdutos({
                   </div>
 
                   {product.expiration_date ? (
-                    <div className={styles.UserInfo}>
+                    <div>
                       <b>Data de Validade do Produto: </b>
                       <span>
                         {product.expiration_date
@@ -241,7 +241,7 @@ export default function FormProdutos({
                     </div>
                   ) : null}
 
-                  <div className={styles.UserInfo}>
+                  <div>
                     <b>Quantidade: </b>
                     <span>{product.quantity}</span>
                   </div>
@@ -251,7 +251,7 @@ export default function FormProdutos({
                 Você tem certeza que deseja excluir o cadastro do produto
                 {" " + product.name + " ?"}
               </p>
-              <div className={styles.cardFooterUserDelete}>
+              <div className={styles.cardFooterProductDelete}>
                 <button
                   onClick={() => handlerDeleteProduct()}
                   className={styles.btnDelete}

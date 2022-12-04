@@ -60,81 +60,87 @@ export default function Products() {
   return (
     <>
       <main>
-        <header className="header-page">Produtos</header>
-
-        {isLoadingProducts ? (
-          <Loading />
-        ) : (
-          <div className={styles.containerTable}>
-            <div className={styles.actions}>
-              <form action="" className={styles.search}>
-                <input type="text" value={""} placeholder="Pesquisar" />
-                <FiSearch size={20} />
-              </form>
-
-              <button className={styles.actionButton}>
-                Cadastrar
-                <FiUser size={20} />
-              </button>
-            </div>
-
-            <div>
-              <table className={styles.table}>
-                <tr>
-                  <td>Número do Lote</td>
-                  <td>Nome do produto</td>
-                  <td>Gramatura</td>
-                  <td>Data de produção</td>
-                  <td>Validade</td>
-                  <td>
-                    <FiEdit2></FiEdit2>
-                  </td>
-                  <td>
-                    <FiTrash color="#ff0000"></FiTrash>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Número do Lote</td>
-                  <td>Nome do produto</td>
-                  <td>Gramatura</td>
-                  <td>Data de produção</td>
-                  <td>Validade</td>
-                  <td>
-                    <FiEdit2></FiEdit2>
-                  </td>
-                  <td>
-                    <FiTrash color="#ff0000"></FiTrash>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Número do Lote</td>
-                  <td>Nome do produto</td>
-                  <td>Gramatura</td>
-                  <td>Data de produção</td>
-                  <td>Validade</td>
-                  <td>
-                    <FiEdit2></FiEdit2>
-                  </td>
-                  <td>
-                    <FiTrash color="#ff0000"></FiTrash>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Número do Lote</td>
-                  <td>Nome do produto</td>
-                  <td>Gramatura</td>
-                  <td>Data de produção</td>
-                  <td>Validade</td>
-                  <td>
-                    <FiEdit2></FiEdit2>
-                  </td>
-                  <td>
-                    <FiTrash color="#ff0000"></FiTrash>
-                  </td>
-                </tr>
-              </table>
-            </div>
-          </div>
+        {!isFormProductOpen && (
+          <>
+            <header className="header-page">Produtos</header>
+            {isLoadingProducts ? (
+              <Loading />
+            ) : (
+              <div className={styles.containerTable}>
+                <div className={styles.actions}>
+                  <form action="" className={styles.search}>
+                    <input type="text" value={""} placeholder="Pesquisar" />
+                    <FiSearch size={20} />
+                  </form>
+    
+                  <button className={styles.actionButton} onClick={() => setIsFormProductOpen(true)}>
+                    Cadastrar
+                    <FiUser size={20} />
+                  </button>
+                </div>
+    
+                <div>
+                  <table className={styles.table}>
+                    <tr>
+                      <td>Número do Lote</td>
+                      <td>Nome do produto</td>
+                      <td>Gramatura</td>
+                      <td>Data de produção</td>
+                      <td>Validade</td>
+                      <td>
+                        <FiEdit2></FiEdit2>
+                      </td>
+                      <td>
+                        <FiTrash color="#ff0000"></FiTrash>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Número do Lote</td>
+                      <td>Nome do produto</td>
+                      <td>Gramatura</td>
+                      <td>Data de produção</td>
+                      <td>Validade</td>
+                      <td>
+                        <FiEdit2></FiEdit2>
+                      </td>
+                      <td>
+                        <FiTrash color="#ff0000"></FiTrash>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Número do Lote</td>
+                      <td>Nome do produto</td>
+                      <td>Gramatura</td>
+                      <td>Data de produção</td>
+                      <td>Validade</td>
+                      <td>
+                        <FiEdit2></FiEdit2>
+                      </td>
+                      <td>
+                        <FiTrash onClick={() => {
+                                // setProductIdToUpdate(product.id)
+                                setIsDeleteProductAlertOpen(true)
+                              }} color="#ff0000"></FiTrash>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Número do Lote</td>
+                      <td>Nome do produto</td>
+                      <td>Gramatura</td>
+                      <td>Data de produção</td>
+                      <td>Validade</td>
+                      <td>
+                        <FiEdit2></FiEdit2>
+                      </td>
+                      <td>
+                        <FiTrash color="#ff0000"></FiTrash>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            )}
+          </>
         )}
 
         <FormProdutos

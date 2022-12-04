@@ -1,0 +1,136 @@
+.containerCardProducts {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  right: 50%;
+  transform: translateX(-50%);
+  background-color: rgb(219, 217, 217);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 98%;
+  margin: 20px auto 0;
+  border-radius: 8px;
+  animation: fadeIn 0.5s both;
+}
+
+.containerInput {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.containerInput label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #222;
+  padding: 5px 0;
+}
+
+.containerInput input,
+.containerInput select {
+  padding: 10px 15px;
+  width: 100%;
+  border: 1px solid #222;
+  border-radius: 2px;
+  font-family: "Imprima";
+}
+
+.containerInput input::placeholder,
+.containerInput select::placeholder {
+  font-family: "Imprima";
+}
+
+.cardHeader {
+  padding: 10px 30px;
+  text-align: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cardHeader h2 {
+  flex: 1;
+}
+
+.cardHeader svg {
+  cursor: pointer;
+}
+
+.containerProductsInfo {
+  width: 100%;
+  padding: 30px 10px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cardFooterProductDelete {
+  padding: 0 30px 10px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.cardFooter,
+.cardFooterProductDelete {
+  padding: 15px 30px 10px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+}
+
+.productInfoCard {
+  background: #fff;
+  width: 95%;
+  padding: 80px 10px;
+  border: 1px solid #222;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.messageAlert {
+  padding: 15px 0 10px;
+  color: red;
+}
+
+.cardFooterProductDelete .btnDelete {
+  border: 1px solid red;
+  color: red;
+}
+
+.cardFooterProductDelete .btnDelete:hover {
+  background: red;
+  color: #fff;
+}
+
+.cardFooterProductDelete .btnCancel {
+  border: 1px solid #222;
+  color: #222;
+}
+
+.cardFooter button,
+.cardFooterProductDelete button {
+  color: green;
+  border: 1px solid green;
+  padding: 5px 20px;
+  font-family: "Imprima";
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.cardFooter button:hover {
+  background: green;
+  color: #fff;
+}
