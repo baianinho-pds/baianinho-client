@@ -43,6 +43,11 @@ export default function Sidebar() {
             <AiOutlineShoppingCart /> Materia Prima
           </Link>
         </li>
+        <li>
+          <Link to="/produtos">
+            <AiOutlineShoppingCart /> Produtos
+          </Link>
+        </li>
       </ul>
     </nav>
   );
