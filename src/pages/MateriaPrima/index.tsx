@@ -5,10 +5,12 @@ import FormMateriaPrima from "../../components/FormMateriaPrima";
 import { FeedStock, FeedStockService } from "../../services/feedstock";
 import { toast } from "react-toastify";
 import Loading from "../../components/Loader";
+import MessageAlert from "../../components/MessageAlert";
 
 export default function MateriaPrima() {
   const [isLoadingFeedstock, setIsLoadingFeedstock] = useState(false);
   const [searchFeedstockValue, setSearchFeedstockValue] = useState("");
+  const [modalMessageAlertState, setModalMessageAlertState] = useState(false);
   const [isFormMateriaPrimaOpen, setIsFormMateriaPrimaOpen] = useState(false);
   const [isDeleteMateriaPrimaAlertOpen, setIsDeleteMateriaPrimaAlertOpen] =
     useState(false);
@@ -140,6 +142,7 @@ export default function MateriaPrima() {
             setIsFormMateriaPrimaOpen(false);
             if (requestFetchData) {
               fetchFeedstock();
+              setModalMessageAlertState(true)
             }
           }}
           isOpen={isFormMateriaPrimaOpen || isDeleteMateriaPrimaAlertOpen}
@@ -151,6 +154,11 @@ export default function MateriaPrima() {
               : undefined
           }
           feedStockProp={materiaPrimaSelecionada}
+        />
+
+        <MessageAlert
+          isOpen={modalMessageAlertState}
+          onRequestClose={() => setModalMessageAlertState(false)}
         />
       </main>
     </>
