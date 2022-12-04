@@ -2,25 +2,28 @@ import styles from "./materiaPrima.module.css";
 import { FiEdit2, FiTrash, FiSearch, FiUser } from "react-icons/fi";
 import { useState } from "react";
 import FormMateriaPrima from "../../components/FormMateriaPrima";
-import { MateriaPrimaModel } from "../../interfaces/materia-prima-interface";
+import { FeedStock } from "../../services/feedstock";
 
 export default function MateriaPrima() {
   const [isFormMateriaPrimaOpen, setIsFormMateriaPrimaOpen] = useState(false);
   const [isDeleteMateriaPrimaAlertOpen, setIsDeleteMateriaPrimaAlertOpen] = useState(false);
-  const [listaMateriaPrima, setListaMateriaPrima] = useState<MateriaPrimaModel[]>([]);
-  const [materiaPrimaSelecionada, setMateriaPrimaSelecionada] = useState<MateriaPrimaModel>({
-    fornecedor: '',
-    nome: '',
-    unidade_medida: '',
-    validade: ''
+  const [listaMateriaPrima, setListaMateriaPrima] = useState<FeedStock[]>([]);
+  const [materiaPrimaSelecionada, setMateriaPrimaSelecionada] = useState<Omit<FeedStock, 'id'>>({
+    provider: '',
+    name: '',
+    unit: '',
+    validity: '',
+    supplies_type: '',
   })
+  
+  const [searchFeedstock, setSearchFeedstock] = useState("");
 
   function abrirFormulario() {
     console.log(listaMateriaPrima);
     setIsFormMateriaPrimaOpen(true);
   }
 
-  function selecionarMateriaPrima(materiaPrima: MateriaPrimaModel, action: 'deletar' | 'editar') {
+  function selecionarMateriaPrima(materiaPrima: FeedStock, action: 'deletar' | 'editar') {
     if(action === 'deletar') {
       setIsDeleteMateriaPrimaAlertOpen(true)
       setMateriaPrimaSelecionada(materiaPrima)
@@ -37,7 +40,7 @@ export default function MateriaPrima() {
             <div className={styles.containerTable}>
               <div className={styles.actions}>
                 <form action="" className={styles.search}>
-                  <input type="text" value={""} placeholder="Pesquisar" />
+                  <input type="text" value={searchFeedstock} placeholder="Pesquisar" onChange={(e) => setSearchFeedstock(e.target.value)} />
                   <FiSearch size={20} />
                 </form>
 
@@ -55,8 +58,8 @@ export default function MateriaPrima() {
                   {listaMateriaPrima.map((materiaPrima) => (
                     <tr key={materiaPrima.id}>
                       <td>ID {materiaPrima.id}</td>
-                      <td>{materiaPrima.nome}</td>
-                      <td>{materiaPrima.validade}</td>
+                      <td>{materiaPrima.name}</td>
+                      <td>{materiaPrima.validity}</td>
                       <td>
                         <FiEdit2></FiEdit2>
                       </td>
@@ -82,7 +85,7 @@ export default function MateriaPrima() {
               ? 'form' 
               : undefined
           }
-          materiaPrimaProp={materiaPrimaSelecionada}
+          feedStockProp={materiaPrimaSelecionada}
         />
       </main>
     </>
