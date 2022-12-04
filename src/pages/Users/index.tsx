@@ -6,6 +6,7 @@ import MessageAlert from "../../components/MessageAlert";
 import { FindPageResponse, PersonService } from "../../services/person";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Loading from "../../components/Loader";
 export default function Users() {
   const [isFormUserOpen, setIsFormUserOpen] = useState(false);
   const [personIdToUpdate, setPersonIdToUpdate] = useState<number>();
@@ -61,9 +62,7 @@ export default function Users() {
         <ToastContainer />
         <header className="header-page">Usuários</header>
         {isLoadingPersons ? (
-          <div className={styles.containerLoading}>
-            <div className={styles.loader}></div>
-          </div>
+          <Loading />
         ) : (
           <div className={styles.containerTable}>
             <div className={styles.actions}>

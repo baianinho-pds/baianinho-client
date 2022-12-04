@@ -1,25 +1,27 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { GrClose } from "react-icons/gr";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { Product } from "../../models/product";
+import { ProductService } from "../../services/product";
 import styles from "./formProdutos.module.css";
 
-interface FormProdutosProps {
+interface FormProductsProps {
   isOpen: boolean;
   onRequestClose: (requestFetchData?: boolean) => void;
   action?: "form" | "delete";
-  // personId?: number;
+  productId?: number;
 }
 
 type ProductFormParams = Omit<Product, "id"> & {
   id?: number;
 };
 
-function FormProdutos({ isOpen, onRequestClose, action }: FormProdutosProps) {
-  const resetForm = () => {
-    console.log("To Do");
-  };
-
+export default function FormProdutos({
+  isOpen,
+  onRequestClose,
+  action,
+  productId,
+}: FormProductsProps) {
   const [product, setProduct] = useState<ProductFormParams>({
     name: "",
     price: 0,
@@ -30,6 +32,66 @@ function FormProdutos({ isOpen, onRequestClose, action }: FormProdutosProps) {
     loteNumber: "",
     productWeight: 0,
   });
+
+  const resetForm = () => {
+    setProduct({
+      name: "",
+      price: 0,
+      created_at: "",
+      updated_at: "",
+      expiration_date: "",
+      quantity: 0,
+      loteNumber: "",
+      productWeight: 0,
+    });
+
+    const handlerSubmitFormProduct = async () => {
+      try {
+        if (product.id) {
+          await ProductService.updateProduct(product.id, {
+            ...product,
+          });
+        } else {
+          await ProductService.addProduct({
+            ...product,
+          });
+        }
+        onRequestClose(true);
+        resetForm();
+      } catch (error) {
+        toast.error("Verifique todos os campos ou tente novamente mais tarde", {
+          theme: "colored",
+        });
+      }
+    };
+  };
+
+  const handlerDeleteProduct = async () => {
+    try {
+      if (product.id) {
+        await ProductService.deleteProduct(product.id);
+      }
+      onRequestClose(true);
+      resetForm();
+    } catch (error) {
+      toast.error("Erro ao excluir produto, tente novamente", {
+        theme: "colored",
+      });
+    }
+  };
+
+  const fetchProduct = useCallback(async () => {
+    if (productId) {
+      const fetchedProduct = await ProductService.findOne(productId);
+      setProduct({
+        ...fetchedProduct,
+      });
+    }
+  }, [productId]);
+
+  useEffect(() => {
+    fetchProduct();
+  }, [fetchProduct]);
 
   return (
     <>
@@ -132,25 +194,6 @@ function FormProdutos({ isOpen, onRequestClose, action }: FormProdutosProps) {
                     }
                   />
                 </div>
-
-                {product.id ? (
-                  <div className={styles.containerInput}>
-                    <label htmlFor="demissionDate">Data de demissão</label>
-                    <input
-                      type="date"
-                      name="demissionDate"
-                      id="demissionDate"
-                      placeholder="Digite a data de demissão"
-                      value={person?.demission_date ?? undefined}
-                      onChange={(e) =>
-                        setPerson((oldPerson) => ({
-                          ...oldPerson,
-                          demission_date: e.target.value,
-                        }))
-                      }
-                    />
-                  </div>
-                ) : undefined}
               </form>
               {/* <div className={styles.cardFooter}>
                 <button onClick={() => handlerSubmitFormUser()}>Salvar</button>
@@ -161,70 +204,56 @@ function FormProdutos({ isOpen, onRequestClose, action }: FormProdutosProps) {
               <div className={styles.containerUserInfo}>
                 <div className={styles.userInfoCard}>
                   <div className={styles.UserInfo}>
-                    <b>Nome Completo: </b>
-                    <span>{person.name}</span>
+                    <b>Nome do Produto: </b>
+                    <span>{product.name}</span>
                   </div>
 
                   <div className={styles.UserInfo}>
-                    <b>CPF: </b>
-                    <span>
-                      {person.cpf.replace(
-                        /(\d{3})(\d{3})(\d{3})(\d{2})/,
-                        "$1.$2.$3-$4"
-                      )}
-                    </span>
+                    <b>Lote do Produto: </b>
+                    <span>{product.loteNumber}</span>
                   </div>
 
                   <div className={styles.UserInfo}>
-                    <b>Data de Admissão: </b>
+                    <b>Data de Fabricação: </b>
                     <span>
-                      {person.admission_date
+                      {product.created_at
                         ? new Intl.DateTimeFormat("pt-BR", {
                             day: "2-digit",
                             month: "2-digit",
                             year: "numeric",
-                          }).format(new Date(person.admission_date))
-                        : person.admission_date}
+                          }).format(new Date(product.created_at))
+                        : product.created_at}
                     </span>
                   </div>
 
-                  {person.demission_date ? (
+                  {product.expiration_date ? (
                     <div className={styles.UserInfo}>
-                      <b>Data de Demissão: </b>
+                      <b>Data de Validade do Produto: </b>
                       <span>
-                        {person.demission_date
+                        {product.expiration_date
                           ? new Intl.DateTimeFormat("pt-BR", {
                               day: "2-digit",
                               month: "2-digit",
                               year: "numeric",
-                            }).format(new Date(person?.demission_date))
-                          : person.demission_date}
+                            }).format(new Date(product.expiration_date))
+                          : product.expiration_date}
                       </span>
                     </div>
                   ) : null}
 
                   <div className={styles.UserInfo}>
-                    <b>Cargo Atual: </b>
-                    <span>
-                      {person.role_name
-                        ? PersonRolesTranslated[person.role_name]
-                        : "Não preenchido"}
-                    </span>
-                  </div>
-
-                  <div className={styles.UserInfo}>
-                    <b>CTPS: </b>
-                    <span>{person.ctps}</span>
+                    <b>Quantidade: </b>
+                    <span>{product.quantity}</span>
                   </div>
                 </div>
               </div>
               <p className={styles.messageAlert}>
-                Você tem certeza que deseja excluir o cadastro do usuário
-                {" " + person.name + " ?"}
+                Você tem certeza que deseja excluir o cadastro do produto
+                {" " + product.name + " ?"}
               </p>
               <div className={styles.cardFooterUserDelete}>
                 <button
-                  onClick={() => handlerDeleteUser()}
+                  onClick={() => handlerDeleteProduct()}
                   className={styles.btnDelete}
                 >
                   Sim Excluir

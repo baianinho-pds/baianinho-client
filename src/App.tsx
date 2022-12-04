@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Users from "./pages/Users";
 import MateriaPrima from "./pages/MateriaPrima";
-import Produtos from "./pages/Produtos";
+import Products from "./pages/Products";
 import SidebarMaterialUi from "./components/SidebarMaterialUi";
 
 function App() {
@@ -14,7 +14,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/users" element={<Users />} />
           <Route path="/materia-prima" element={<MateriaPrima />} />
-          <Route path="/produtos" element={<Produtos />} />
+          <Route path="/produtos" element={<Products />} />
         </Routes>
       </div>
     </BrowserRouter>
