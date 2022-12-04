@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { GrClose } from "react-icons/gr";
 import { toast, ToastContainer } from "react-toastify";
 import { FeedStock, FeedStockService } from "../../services/feedstock";
@@ -8,7 +8,7 @@ type FormMateriaPrimaProps = {
   isOpen: boolean;
   onRequestClose: (requestFetchData?: boolean) => void;
   action?: "form" | "delete";
-  feedStockProp: Omit<FeedStock, 'id'>
+  feedStockId: number | undefined
 };
 
 type FeedstockFormParams = Omit<FeedStock, 'id'>
@@ -16,7 +16,7 @@ type FeedstockFormParams = Omit<FeedStock, 'id'>
 function FormMateriaPrima({
   isOpen,
   onRequestClose,
-  feedStockProp: materiaPrimaProp,
+  feedStockId,
   action
 }: FormMateriaPrimaProps) {
   const [materiaPrima, setMateriaPrima] = useState<FeedstockFormParams>({
@@ -28,18 +28,26 @@ function FormMateriaPrima({
     amount: 0
   });
 
+  const resetForm = () => {
+    setMateriaPrima({
+      name: "",
+      validity: "",
+      provider: "",
+      supplies_type: "",
+      unit: "",
+    })
+  };
+
   async function SalvarMateriaPrima() {
     try {
-      await FeedStockService.addFeedstock(materiaPrima)
-      setMateriaPrima({
-        name: "",
-        validity: "",
-        provider: "",
-        supplies_type: "",
-        unit: "",
-      })
-      
+      if(feedStockId) {
+        await FeedStockService.updateFeedstock(feedStockId, materiaPrima)
+      } else {
+        await FeedStockService.addFeedstock(materiaPrima)
+      }
+
       onRequestClose(true)
+      resetForm()
     } catch(error) {
       console.error(error);
       
@@ -49,11 +57,21 @@ function FormMateriaPrima({
     }
   }
 
-  useEffect(() => {
-    if(action === 'delete' && materiaPrimaProp) {
-      setMateriaPrima(materiaPrimaProp)
+  const fetchFeedstock = useCallback(async () => {
+    if(feedStockId) {
+      const fetchedFeedstock = await FeedStockService.findOne(feedStockId)
+      if(fetchedFeedstock) {
+        setMateriaPrima({
+          ...fetchedFeedstock,
+          validity: fetchedFeedstock.validity?.split('T')[0]
+        })
+      }
     }
-  }, [])
+  }, [feedStockId])
+
+  useEffect(() => {
+    fetchFeedstock()
+  }, [fetchFeedstock])
 
   return (
     <>

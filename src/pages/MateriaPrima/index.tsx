@@ -14,20 +14,11 @@ export default function MateriaPrima() {
   const [isFormMateriaPrimaOpen, setIsFormMateriaPrimaOpen] = useState(false);
   const [isDeleteMateriaPrimaAlertOpen, setIsDeleteMateriaPrimaAlertOpen] =
     useState(false);
+  const [feedstockIdToUpdate, setFeedstockIdToUpdate] = useState<number | undefined>();
   const [listaMateriaPrima, setListaMateriaPrima] = useState<FeedStock[]>([]);
-  const [materiaPrimaSelecionada, setMateriaPrimaSelecionada] = useState<
-    Omit<FeedStock, "id">
-  >({
-    provider: "",
-    name: "",
-    unit: "",
-    validity: "",
-    supplies_type: "",
-  });
+
   let timer: number | undefined;
-  const [initialFeedstockList, setInitialFeedstockList] = useState<FeedStock[]>(
-    []
-  );
+  const [initialFeedstockList, setInitialFeedstockList] = useState<FeedStock[]>([]);
 
   function selecionarMateriaPrima(
     materiaPrima: FeedStock,
@@ -35,7 +26,6 @@ export default function MateriaPrima() {
   ) {
     if (action === "deletar") {
       setIsDeleteMateriaPrimaAlertOpen(true);
-      setMateriaPrimaSelecionada(materiaPrima);
     }
   }
 
@@ -117,7 +107,12 @@ export default function MateriaPrima() {
                           <td>{materiaPrima.name}</td>
                           <td>{materiaPrima.validity}</td>
                           <td>
-                            <FiEdit2></FiEdit2>
+                            <FiEdit2
+                              onClick={() => {
+                                setIsFormMateriaPrimaOpen(true)
+                                setFeedstockIdToUpdate(materiaPrima.id)
+                              }}
+                            />
                           </td>
                           <td>
                             <FiTrash
@@ -143,6 +138,7 @@ export default function MateriaPrima() {
             if (requestFetchData) {
               fetchFeedstock();
               setModalMessageAlertState(true)
+              setFeedstockIdToUpdate(undefined);
             }
           }}
           isOpen={isFormMateriaPrimaOpen || isDeleteMateriaPrimaAlertOpen}
@@ -153,7 +149,7 @@ export default function MateriaPrima() {
               ? "form"
               : undefined
           }
-          feedStockProp={materiaPrimaSelecionada}
+          feedStockId={feedstockIdToUpdate}
         />
 
         <MessageAlert

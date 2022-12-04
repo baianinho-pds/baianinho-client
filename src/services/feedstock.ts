@@ -25,4 +25,12 @@ export class FeedStockService {
   static async findMany(query?: string): Promise<Page<FeedStock>> {
     return await new Api().get(`/feedstock${query}`);
   }
+
+  static async findOne(id: number): Promise<FeedStock> {
+    return await new Api().get(`/feedstock/${id}`);
+  }
+
+  static async updateFeedstock(id: number, person: Omit<FeedStock, "id">) {
+    await new Api().put(`/feedstock/${id}`, person);
+  }
 }
