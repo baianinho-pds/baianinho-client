@@ -33,4 +33,8 @@ export class FeedStockService {
   static async updateFeedstock(id: number, person: Omit<FeedStock, "id">) {
     await new Api().put(`/feedstock/${id}`, person);
   }
+
+  static async deleteFeedstock(id: number) {
+    await new Api().delete(`/feedstock/${id}`);
+  }
 }

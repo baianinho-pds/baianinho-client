@@ -12,22 +12,13 @@ export default function MateriaPrima() {
   const [searchFeedstockValue, setSearchFeedstockValue] = useState("");
   const [modalMessageAlertState, setModalMessageAlertState] = useState(false);
   const [isFormMateriaPrimaOpen, setIsFormMateriaPrimaOpen] = useState(false);
-  const [isDeleteMateriaPrimaAlertOpen, setIsDeleteMateriaPrimaAlertOpen] =
-    useState(false);
+  const [isDeleteFeedstockAlertOpen, setIsDeleteFeedstockAlertOpen] = useState(false);
   const [feedstockIdToUpdate, setFeedstockIdToUpdate] = useState<number | undefined>();
   const [listaMateriaPrima, setListaMateriaPrima] = useState<FeedStock[]>([]);
 
   let timer: number | undefined;
   const [initialFeedstockList, setInitialFeedstockList] = useState<FeedStock[]>([]);
 
-  function selecionarMateriaPrima(
-    materiaPrima: FeedStock,
-    action: "deletar" | "editar"
-  ) {
-    if (action === "deletar") {
-      setIsDeleteMateriaPrimaAlertOpen(true);
-    }
-  }
 
   const fetchFeedstock = useCallback(async () => {
     setIsLoadingFeedstock(true);
@@ -116,9 +107,10 @@ export default function MateriaPrima() {
                           </td>
                           <td>
                             <FiTrash
-                              onClick={() =>
-                                selecionarMateriaPrima(materiaPrima, "deletar")
-                              }
+                              onClick={() => {
+                                setFeedstockIdToUpdate(materiaPrima.id)
+                                setIsDeleteFeedstockAlertOpen(true)
+                              }}
                               color="#ff0000"
                             ></FiTrash>
                           </td>
@@ -135,15 +127,18 @@ export default function MateriaPrima() {
         <FormMateriaPrima
           onRequestClose={(requestFetchData) => {
             setIsFormMateriaPrimaOpen(false);
+            setIsDeleteFeedstockAlertOpen(false)
+            setFeedstockIdToUpdate(undefined);
+
             if (requestFetchData) {
               fetchFeedstock();
               setModalMessageAlertState(true)
               setFeedstockIdToUpdate(undefined);
             }
           }}
-          isOpen={isFormMateriaPrimaOpen || isDeleteMateriaPrimaAlertOpen}
+          isOpen={isFormMateriaPrimaOpen || isDeleteFeedstockAlertOpen}
           action={
-            isDeleteMateriaPrimaAlertOpen
+            isDeleteFeedstockAlertOpen
               ? "delete"
               : isFormMateriaPrimaOpen
               ? "form"
