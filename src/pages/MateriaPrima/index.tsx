@@ -55,6 +55,10 @@ export default function MateriaPrima() {
     }, 500);
   };
 
+  const getFormattedDate = (date: string) => {
+    return date?.split('T')[0].split('-').reverse().join('/')
+  }
+
   useEffect(() => {
     fetchFeedstock();
   }, [fetchFeedstock]);
@@ -96,7 +100,7 @@ export default function MateriaPrima() {
                         <tr key={materiaPrima.id}>
                           <td>ID {materiaPrima.id}</td>
                           <td>{materiaPrima.name}</td>
-                          <td>{materiaPrima.validity}</td>
+                          <td style={{ width: '20%' }}>{getFormattedDate(materiaPrima?.validity)}</td>
                           <td>
                             <FiEdit2
                               onClick={() => {
@@ -105,14 +109,14 @@ export default function MateriaPrima() {
                               }}
                             />
                           </td>
-                          <td>
+                          <td className={styles.btnDelete}>
                             <FiTrash
                               onClick={() => {
                                 setFeedstockIdToUpdate(materiaPrima.id)
                                 setIsDeleteFeedstockAlertOpen(true)
                               }}
                               color="#ff0000"
-                            ></FiTrash>
+                            />
                           </td>
                         </tr>
                       ))}

@@ -136,3 +136,7 @@
   border: 1px solid #222;
   color: #222;
 }
+
+.btnDelete {
+  text-align: end;
+}
