@@ -6,8 +6,7 @@ import styles from "./formMateriaPrima.module.css";
 
 type FormMateriaPrimaProps = {
   isOpen: boolean;
-  closeForm: () => void;
-  setListaMateriaPrima: React.Dispatch<React.SetStateAction<FeedStock[]>>;
+  onRequestClose: (requestFetchData?: boolean) => void;
   action?: "form" | "delete";
   feedStockProp: Omit<FeedStock, 'id'>
 };
@@ -16,8 +15,7 @@ type FeedstockFormParams = Omit<FeedStock, 'id'>
 
 function FormMateriaPrima({
   isOpen,
-  closeForm,
-  setListaMateriaPrima,
+  onRequestClose,
   feedStockProp: materiaPrimaProp,
   action
 }: FormMateriaPrimaProps) {
@@ -32,7 +30,6 @@ function FormMateriaPrima({
 
   async function SalvarMateriaPrima() {
     try {
-      console.log('materiaPrima: ',materiaPrima)
       await FeedStockService.addFeedstock(materiaPrima)
       setMateriaPrima({
         name: "",
@@ -42,10 +39,9 @@ function FormMateriaPrima({
         unit: "",
       })
       
-      closeForm()
-      console.log("Matéria-Prima: ", materiaPrima);
+      onRequestClose(true)
     } catch(error) {
-      console.log('aqui error: ',error);
+      console.error(error);
       
       toast.error("Verifique todos os campos ou tente novamente mais tarde", {
         theme: "colored",
@@ -54,10 +50,7 @@ function FormMateriaPrima({
   }
 
   useEffect(() => {
-    console.log('aqui aqui');
-    
     if(action === 'delete' && materiaPrimaProp) {
-      console.log('aqui também');
       setMateriaPrima(materiaPrimaProp)
     }
   }, [])
@@ -70,7 +63,7 @@ function FormMateriaPrima({
           <div className={styles.containerCardMateriaPrima}>
             <div className={styles.cardHeader}>
               <h2>Dados da Matéria-Prima</h2>
-              <GrClose onClick={closeForm} />
+              <GrClose onClick={() => onRequestClose()} />
             </div>
 
             {action === 'form' && (
