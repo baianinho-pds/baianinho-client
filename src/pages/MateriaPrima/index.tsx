@@ -2,10 +2,11 @@ import styles from "./materiaPrima.module.css";
 import { FiEdit2, FiTrash, FiSearch, FiUser } from "react-icons/fi";
 import { useState, useCallback, useEffect } from "react";
 import FormMateriaPrima from "../../components/FormMateriaPrima";
-import { FeedStock, FeedStockService } from "../../services/feedstock";
+import { FeedStockService } from "../../services/feedstock";
 import { toast } from "react-toastify";
 import Loading from "../../components/Loader";
 import MessageAlert from "../../components/MessageAlert";
+import { FeedStock } from "../../models/feedstock";
 
 export default function MateriaPrima() {
   const [isLoadingFeedstock, setIsLoadingFeedstock] = useState(false);
@@ -13,7 +14,7 @@ export default function MateriaPrima() {
   const [modalMessageAlertState, setModalMessageAlertState] = useState(false);
   const [isFormMateriaPrimaOpen, setIsFormMateriaPrimaOpen] = useState(false);
   const [isDeleteFeedstockAlertOpen, setIsDeleteFeedstockAlertOpen] = useState(false);
-  const [feedstockIdToUpdate, setFeedstockIdToUpdate] = useState<number | undefined>();
+  const [feedstockIdToUpdate, setFeedstockIdToUpdate] = useState<number | undefined>(undefined);
   const [listaMateriaPrima, setListaMateriaPrima] = useState<FeedStock[]>([]);
 
   let timer: number | undefined;
@@ -55,8 +56,10 @@ export default function MateriaPrima() {
     }, 500);
   };
 
-  const getFormattedDate = (date: string) => {
-    return date?.split('T')[0].split('-').reverse().join('/')
+  const getFormattedDate = (date: string | undefined) => {
+    if(date) {
+      return date?.split('T')[0].split('-').reverse().join('/')
+    }
   }
 
   useEffect(() => {
