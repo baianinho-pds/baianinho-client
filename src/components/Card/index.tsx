@@ -1,4 +1,3 @@
-import { BsGraphUp } from "react-icons/bs";
 import styles from "./card.module.css";
 
 interface CardProps {
