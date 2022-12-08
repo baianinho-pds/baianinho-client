@@ -1,8 +1,8 @@
 import { useEffect, useState, useCallback } from "react";
 import { GrClose } from "react-icons/gr";
 import { toast, ToastContainer } from "react-toastify";
-import { FeedStock } from "../../models/feedstock";
-import { FeedStockService } from "../../services/feedstock";
+import { FeedStock } from "../../../models/feedstock";
+import { FeedStockService } from "../../../services/feedstock";
 import styles from "./formMateriaPrima.module.css";
 
 type FormMateriaPrimaProps = {

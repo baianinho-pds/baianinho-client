@@ -1,7 +1,7 @@
 import styles from "./materiaPrima.module.css";
 import { FiEdit2, FiTrash, FiSearch, FiUser } from "react-icons/fi";
 import { useState, useCallback, useEffect } from "react";
-import FormMateriaPrima from "../../components/FormMateriaPrima";
+import FormMateriaPrima from "./FormMateriaPrima";
 import { FeedStockService } from "../../services/feedstock";
 import { toast } from "react-toastify";
 import Loading from "../../components/Loader";
@@ -13,13 +13,17 @@ export default function MateriaPrima() {
   const [searchFeedstockValue, setSearchFeedstockValue] = useState("");
   const [modalMessageAlertState, setModalMessageAlertState] = useState(false);
   const [isFormMateriaPrimaOpen, setIsFormMateriaPrimaOpen] = useState(false);
-  const [isDeleteFeedstockAlertOpen, setIsDeleteFeedstockAlertOpen] = useState(false);
-  const [feedstockIdToUpdate, setFeedstockIdToUpdate] = useState<number | undefined>(undefined);
+  const [isDeleteFeedstockAlertOpen, setIsDeleteFeedstockAlertOpen] =
+    useState(false);
+  const [feedstockIdToUpdate, setFeedstockIdToUpdate] = useState<
+    number | undefined
+  >(undefined);
   const [listaMateriaPrima, setListaMateriaPrima] = useState<FeedStock[]>([]);
 
   let timer: number | undefined;
-  const [initialFeedstockList, setInitialFeedstockList] = useState<FeedStock[]>([]);
-
+  const [initialFeedstockList, setInitialFeedstockList] = useState<FeedStock[]>(
+    []
+  );
 
   const fetchFeedstock = useCallback(async () => {
     setIsLoadingFeedstock(true);
@@ -57,10 +61,10 @@ export default function MateriaPrima() {
   };
 
   const getFormattedDate = (date: string | undefined) => {
-    if(date) {
-      return date?.split('T')[0].split('-').reverse().join('/')
+    if (date) {
+      return date?.split("T")[0].split("-").reverse().join("/");
     }
-  }
+  };
 
   useEffect(() => {
     fetchFeedstock();
@@ -103,20 +107,22 @@ export default function MateriaPrima() {
                         <tr key={materiaPrima.id}>
                           <td>ID {materiaPrima.id}</td>
                           <td>{materiaPrima.name}</td>
-                          <td style={{ width: '20%' }}>{getFormattedDate(materiaPrima?.validity)}</td>
+                          <td style={{ width: "20%" }}>
+                            {getFormattedDate(materiaPrima?.validity)}
+                          </td>
                           <td>
                             <FiEdit2
                               onClick={() => {
-                                setIsFormMateriaPrimaOpen(true)
-                                setFeedstockIdToUpdate(materiaPrima.id)
+                                setIsFormMateriaPrimaOpen(true);
+                                setFeedstockIdToUpdate(materiaPrima.id);
                               }}
                             />
                           </td>
                           <td className={styles.btnDelete}>
                             <FiTrash
                               onClick={() => {
-                                setFeedstockIdToUpdate(materiaPrima.id)
-                                setIsDeleteFeedstockAlertOpen(true)
+                                setFeedstockIdToUpdate(materiaPrima.id);
+                                setIsDeleteFeedstockAlertOpen(true);
                               }}
                               color="#ff0000"
                             />
@@ -134,12 +140,12 @@ export default function MateriaPrima() {
         <FormMateriaPrima
           onRequestClose={(requestFetchData) => {
             setIsFormMateriaPrimaOpen(false);
-            setIsDeleteFeedstockAlertOpen(false)
+            setIsDeleteFeedstockAlertOpen(false);
             setFeedstockIdToUpdate(undefined);
 
             if (requestFetchData) {
               fetchFeedstock();
-              setModalMessageAlertState(true)
+              setModalMessageAlertState(true);
               setFeedstockIdToUpdate(undefined);
             }
           }}

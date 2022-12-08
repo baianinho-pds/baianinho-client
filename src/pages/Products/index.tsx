@@ -5,8 +5,8 @@ import Loading from "../../components/Loader";
 import { FindPageResponse, ProductService } from "../../services/product";
 import { toast } from "react-toastify";
 import MessageAlert from "../../components/MessageAlert";
-import FormMateriaPrima from "../../components/FormMateriaPrima";
-import FormProdutos from "../../components/FormProdutos";
+import FormMateriaPrima from "../MateriaPrima/FormMateriaPrima";
+import FormProdutos from "./FormProdutos";
 
 export default function Products() {
   const [isLoadingProducts, setIsLoadingProducts] = useState(false);
@@ -72,13 +72,16 @@ export default function Products() {
                     <input type="text" value={""} placeholder="Pesquisar" />
                     <FiSearch size={20} />
                   </form>
-    
-                  <button className={styles.actionButton} onClick={() => setIsFormProductOpen(true)}>
+
+                  <button
+                    className={styles.actionButton}
+                    onClick={() => setIsFormProductOpen(true)}
+                  >
                     Cadastrar
                     <FiUser size={20} />
                   </button>
                 </div>
-    
+
                 <div>
                   <table className={styles.table}>
                     <tr>
@@ -117,10 +120,13 @@ export default function Products() {
                         <FiEdit2></FiEdit2>
                       </td>
                       <td>
-                        <FiTrash onClick={() => {
-                                // setProductIdToUpdate(product.id)
-                                setIsDeleteProductAlertOpen(true)
-                              }} color="#ff0000"></FiTrash>
+                        <FiTrash
+                          onClick={() => {
+                            // setProductIdToUpdate(product.id)
+                            setIsDeleteProductAlertOpen(true);
+                          }}
+                          color="#ff0000"
+                        ></FiTrash>
                       </td>
                     </tr>
                     <tr>

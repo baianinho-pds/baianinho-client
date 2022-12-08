@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { GrClose } from "react-icons/gr";
 import { toast, ToastContainer } from "react-toastify";
-import { Product } from "../../models/product";
-import { ProductService } from "../../services/product";
+import { Product } from "../../../models/product";
+import { ProductService } from "../../../services/product";
 import styles from "./formProdutos.module.css";
 
 interface FormProductsProps {
