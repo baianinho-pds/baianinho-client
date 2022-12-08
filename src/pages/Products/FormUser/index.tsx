@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import styles from "./formUser.module.css";
 import { GrClose } from "react-icons/gr";
-import { Person } from "../../models/person";
-import { PersonService } from "../../services/person";
+import { Person } from "../../../models/person";
+import { PersonService } from "../../../services/person";
 import ReactInputMask from "react-input-mask";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

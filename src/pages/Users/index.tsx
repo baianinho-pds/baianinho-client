@@ -1,6 +1,6 @@
 import styles from "./users.module.css";
 import { FiEdit2, FiTrash, FiSearch, FiUser } from "react-icons/fi";
-import FormUser from "../../components/FormUser";
+import FormUser from "../Products/FormUser";
 import { useCallback, useEffect, useState } from "react";
 import MessageAlert from "../../components/MessageAlert";
 import { FindPageResponse, PersonService } from "../../services/person";
