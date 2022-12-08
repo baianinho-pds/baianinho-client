@@ -1,14 +1,11 @@
 import { ReactNode } from "react";
 
-export type ItemWithChildren = {
+export interface Item {
   titlePage: string;
-  iconPage?: ReactNode;
   linkPage: string;
-  children?: ItemWithoutChildren[];
-};
+  iconPage?: ReactNode;
+}
 
-export type ItemWithoutChildren = {
-  titlePage: string;
-  linkPage: string;
-  iconPage?: ReactNode;
-};
+export interface ItemWithChildren extends Item {
+  children?: Item[];
+}
