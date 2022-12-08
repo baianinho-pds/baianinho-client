@@ -19,24 +19,24 @@ const SidebarMaterialUi = () => {
     },
     {
       iconPage: <FiUser />,
-      titlePage: "Usuário",
+      titlePage: "Usuários",
       linkPage: "users",
     },
-    {
-      iconPage: <FiUsers />,
-      titlePage: "Clientes",
-      linkPage: "",
-    },
-    {
-      iconPage: <RiMoneyDollarCircleLine />,
-      titlePage: "Financeiro",
-      linkPage: "",
-    },
-    {
-      iconPage: <MdAttachMoney />,
-      titlePage: "Vendas",
-      linkPage: "",
-    },
+    // {
+    //   iconPage: <FiUsers />,
+    //   titlePage: "Clientes",
+    //   linkPage: "",
+    // },
+    // {
+    //   iconPage: <RiMoneyDollarCircleLine />,
+    //   titlePage: "Financeiro",
+    //   linkPage: "",
+    // },
+    // {
+    //   iconPage: <MdAttachMoney />,
+    //   titlePage: "Vendas",
+    //   linkPage: "",
+    // },
     {
       iconPage: <AiOutlineShoppingCart />,
       titlePage: "Estoque",
