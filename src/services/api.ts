@@ -4,7 +4,7 @@ export class Api {
   private api: AxiosInstance;
   constructor() {
     this.api = axios.create({
-      baseURL: "http://localhost:3001",
+      baseURL: "http://localhost:3002",
     });
   }
 

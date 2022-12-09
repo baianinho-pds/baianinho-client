@@ -12,9 +12,9 @@ const PersonRolesTranslated = {
   seller: "Vendedor(a)",
 };
 
-type PersonFormParams = Omit<Person, "role_name" | "sector_name" | "id"> & {
-  role_name?: Person.Role;
-  sector_name?: Person.Sector;
+type PersonFormParams = Omit<Person, "role" | "sector" | "id"> & {
+  role?: Person.Role;
+  sector?: Person.Sector;
   id?: number;
 };
 
@@ -33,47 +33,48 @@ export default function FormUser({
   const [person, setPerson] = useState<PersonFormParams>({
     name: "",
     cpf: "",
-    contact_phone: "",
+    contactPhone: "",
     ctps: "",
-    admission_date: "",
+    admissionDate: "",
     street: "",
     neighborhood: "",
     city: "",
     number: "",
-    postal_code: "",
+    postalCode: "",
   });
 
   const resetForm = () => {
     setPerson({
       name: "",
       cpf: "",
-      contact_phone: "",
+      contactPhone: "",
       ctps: "",
-      admission_date: "",
+      admissionDate: "",
       street: "",
       neighborhood: "",
       city: "",
       number: "",
-      postal_code: "",
+      postalCode: "",
     });
   };
 
   const handlerSubmitFormUser = async () => {
     try {
-      if (person.role_name && person.sector_name) {
+      if (person.role && person.sector) {
         if (person.id) {
           await PersonService.updatePerson(person.id, {
             ...person,
             cpf: person.cpf.replace(/[. - _ --]/g, ""),
-            contact_phone: person.contact_phone.replace(/[() - _ --]/g, ""),
-            postal_code: person.postal_code.replace(/[- _ --]/g, ""),
+            contactPhone: person.contactPhone.replace(/[() - _ --]/g, ""),
+            postalCode: person.postalCode.replace(/[- _ --]/g, ""),
           });
         } else {
           await PersonService.addPerson({
             ...person,
             cpf: person.cpf.replace(/[. - _ --]/g, ""),
-            contact_phone: person.contact_phone.replace(/[() - _ --]/g, ""),
-            postal_code: person.postal_code.replace(/[- _ --]/g, ""),
+            contactPhone: person.contactPhone.replace(/[() - _ --]/g, ""),
+            postalCode: person.postalCode.replace(/[- _ --]/g, ""),
+            admissionDate: new Date(person.admissionDate),
           });
         }
         onRequestClose(true);
@@ -105,8 +106,12 @@ export default function FormUser({
       const fetchedPerson = await PersonService.findOne(personId);
       setPerson({
         ...fetchedPerson,
-        admission_date: fetchedPerson.admission_date.split("T")[0],
-        demission_date: fetchedPerson.demission_date?.split("T")[0],
+        admissionDate: new Date(fetchedPerson.admissionDate)
+          .toISOString()
+          .split("T")[0],
+        demissionDate: fetchedPerson.demissionDate
+          ? new Date(fetchedPerson.demissionDate)?.toISOString().split("T")[0]
+          : null,
       });
     }
   }, [personId]);
@@ -172,11 +177,11 @@ export default function FormUser({
                     name="contactPhone"
                     id="contactPhone"
                     placeholder="Digite o seu telefone"
-                    value={person?.contact_phone}
+                    value={person?.contactPhone}
                     onChange={(e) =>
                       setPerson((oldPerson) => ({
                         ...oldPerson,
-                        contact_phone: e.target.value,
+                        contactPhone: e.target.value,
                       }))
                     }
                   />
@@ -206,11 +211,15 @@ export default function FormUser({
                     name="admissionDate"
                     id="admissionDate"
                     placeholder="Digite a data de admissão"
-                    value={person?.admission_date}
+                    value={
+                      person?.admissionDate
+                        ? new Date(person?.admissionDate).toISOString()
+                        : undefined
+                    }
                     onChange={(e) =>
                       setPerson((oldPerson) => ({
                         ...oldPerson,
-                        admission_date: e.target.value,
+                        admissionDate: e.target.value,
                       }))
                     }
                   />
@@ -223,11 +232,15 @@ export default function FormUser({
                       name="demissionDate"
                       id="demissionDate"
                       placeholder="Digite a data de demissão"
-                      value={person?.demission_date ?? undefined}
+                      value={
+                        person.demissionDate
+                          ? new Date(person?.demissionDate).toISOString()
+                          : undefined
+                      }
                       onChange={(e) =>
                         setPerson((oldPerson) => ({
                           ...oldPerson,
-                          demission_date: e.target.value,
+                          demissionDate: e.target.value,
                         }))
                       }
                     />
@@ -238,11 +251,11 @@ export default function FormUser({
                   <select
                     name="role"
                     id="role"
-                    value={person?.role_name}
+                    value={person?.role}
                     onChange={(e) =>
                       setPerson((oldPerson) => ({
                         ...oldPerson,
-                        role_name: e.target.value as Person.Role,
+                        role: e.target.value as Person.Role,
                       }))
                     }
                   >
@@ -256,11 +269,11 @@ export default function FormUser({
                   <select
                     name="sector"
                     id="sector"
-                    value={person?.sector_name}
+                    value={person?.sector}
                     onChange={(e) =>
                       setPerson((oldPerson) => ({
                         ...oldPerson,
-                        sector_name: e.target.value as Person.Sector,
+                        sector: e.target.value as Person.Sector,
                       }))
                     }
                   >
@@ -341,11 +354,11 @@ export default function FormUser({
                     name="postalCode"
                     id="postalCode"
                     placeholder="Digite o CEP"
-                    value={person?.postal_code}
+                    value={person?.postalCode}
                     onChange={(e) =>
                       setPerson((oldPerson) => ({
                         ...oldPerson,
-                        postal_code: e.target.value,
+                        postalCode: e.target.value,
                       }))
                     }
                   />
@@ -377,27 +390,27 @@ export default function FormUser({
                   <div className={styles.UserInfo}>
                     <b>Data de Admissão: </b>
                     <span>
-                      {person.admission_date
+                      {person.admissionDate
                         ? new Intl.DateTimeFormat("pt-BR", {
                             day: "2-digit",
                             month: "2-digit",
                             year: "numeric",
-                          }).format(new Date(person.admission_date))
-                        : person.admission_date}
+                          }).format(new Date(person.admissionDate))
+                        : person.admissionDate}
                     </span>
                   </div>
 
-                  {person.demission_date ? (
+                  {person.demissionDate ? (
                     <div className={styles.UserInfo}>
                       <b>Data de Demissão: </b>
                       <span>
-                        {person.demission_date
+                        {person.demissionDate
                           ? new Intl.DateTimeFormat("pt-BR", {
                               day: "2-digit",
                               month: "2-digit",
                               year: "numeric",
-                            }).format(new Date(person?.demission_date))
-                          : person.demission_date}
+                            }).format(new Date(person?.demissionDate))
+                          : person.demissionDate}
                       </span>
                     </div>
                   ) : null}
@@ -405,8 +418,8 @@ export default function FormUser({
                   <div className={styles.UserInfo}>
                     <b>Cargo Atual: </b>
                     <span>
-                      {person.role_name
-                        ? PersonRolesTranslated[person.role_name]
+                      {person.role
+                        ? PersonRolesTranslated[person.role]
                         : "Não preenchido"}
                     </span>
                   </div>

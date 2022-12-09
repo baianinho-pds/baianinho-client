@@ -6,10 +6,14 @@ type Page<T> = {
   total?: number;
 };
 
-export type FindPageResponse = Pick<Person, "id" | "name" | "contact_phone">;
+export type FindPageResponse = Pick<Person, "id" | "name" | "contactPhone">;
 
 export class PersonService {
-  static async addPerson(person: Omit<Person, "id" | "demission_date">) {
+  static async addPerson(person: Omit<Person, "id" | "demissionDate" | "role" | "sector"> & {
+    role?: Person.Role;
+    sector?: Person.Sector;
+    id?: number;
+  }) {
     await new Api().post("/person", person);
   }
 
@@ -21,7 +25,11 @@ export class PersonService {
     return await new Api().get(`/person/${id}`);
   }
 
-  static async updatePerson(id: number, person: Omit<Person, "id">) {
+  static async updatePerson(id: number, person: Omit<Person, "role" | "sector" | "id"> & {
+    role?: Person.Role;
+    sector?: Person.Sector;
+    id?: number;
+  }) {
     await new Api().put(`/person/${id}`, person);
   }
 

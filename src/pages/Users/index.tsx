@@ -90,9 +90,9 @@ export default function Users() {
                   <tr key={person.id}>
                     <td>{person.name}</td>
                     <td>
-                      ({person.contact_phone.substring(0, 2)})
-                      {" " + person.contact_phone.substring(2, 7)}-
-                      {person.contact_phone.substring(7, 11)}
+                      ({person.contactPhone.substring(0, 2)})
+                      {" " + person.contactPhone.substring(2, 7)}-
+                      {person.contactPhone.substring(7, 11)}
                     </td>
                     <td>
                       <FiEdit2
