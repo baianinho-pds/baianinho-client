@@ -20,7 +20,7 @@ export function Input({
   maxLength,
   onChangeInputValue,
 }: InputProps) {
-  const [inputValue, setInputValue] = useState(value || "");
+    setInputValue(value);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
