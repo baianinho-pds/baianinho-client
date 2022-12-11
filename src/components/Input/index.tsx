@@ -51,7 +51,7 @@ export function Input({
             placeholder={placeholder}
             minLength={minLength}
             maxLength={maxLength}
-            value={inputValue}
+            value={type === "date" ? inputValue?.split("T")[0] : inputValue}
             onChange={(e) => onChange(e)}
           />
         )}
