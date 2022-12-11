@@ -36,21 +36,24 @@ export default function Users() {
     }
   }, [PersonService]);
 
-  const searchPerson = useCallback((term: string) => {
-    setSearchValue(term);
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      if (term.length) {
-        const personListFiltered = initialPersonList.filter((person) =>
-          person.name.toLowerCase().includes(term.toLowerCase())
-        );
-        setPersonList(personListFiltered);
-      } else {
-        setSearchValue("");
-        setPersonList(initialPersonList);
-      }
-    }, 500);
-  }, []);
+  const searchPerson = useCallback(
+    (term: string) => {
+      setSearchValue(term);
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        if (term.length) {
+          const personListFiltered = initialPersonList.filter((person) =>
+            person.name.toLowerCase().includes(term.toLowerCase())
+          );
+          setPersonList(personListFiltered);
+        } else {
+          setSearchValue("");
+          setPersonList(initialPersonList);
+        }
+      }, 500);
+    },
+    [initialPersonList, timer]
+  );
 
   useEffect(() => {
     fetchPersons();
