@@ -6,7 +6,7 @@ import { FeedStockService } from "../../services/feedstock";
 import { toast } from "react-toastify";
 import Loading from "../../components/Loader";
 import MessageAlert from "../../components/MessageAlert";
-import { FeedStock } from "../../models/feedstock";
+import { FeedStock } from "../../interfaces/feedstock";
 
 export default function MateriaPrima() {
   const [isLoadingFeedstock, setIsLoadingFeedstock] = useState(false);

@@ -1,4 +1,4 @@
-import { FeedStock } from "../models/feedstock";
+import { FeedStock } from "../interfaces/feedstock";
 import { Api } from "./api"
 
 export type FindPageFeedstockResponse = Pick<FeedStock, 'id' | 'provider' | 'amount'>;
