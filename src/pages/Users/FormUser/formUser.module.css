@@ -72,15 +72,6 @@ form {
   flex-direction: column;
 }
 
-.containerInput label {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: #222;
-  padding: 5px 0;
-}
-
-.containerInput input,
 .containerInput select {
   padding: 10px 15px;
   width: 100%;
@@ -89,7 +80,6 @@ form {
   font-family: "Imprima";
 }
 
-.containerInput input::placeholder,
 .containerInput select::placeholder {
   font-family: "Imprima";
 }

@@ -6,6 +6,7 @@ import { PersonService } from "../../../services/person";
 import ReactInputMask from "react-input-mask";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Input } from "../../../components/Input";
 
 const PersonRolesTranslated = {
   admin: "Administrador(a)",
@@ -67,6 +68,10 @@ export default function FormUser({
             cpf: person.cpf.replace(/[. - _ --]/g, ""),
             contactPhone: person.contactPhone.replace(/[() - _ --]/g, ""),
             postalCode: person.postalCode.replace(/[- _ --]/g, ""),
+            admissionDate: new Date(person.admissionDate),
+            demissionDate: person.demissionDate
+              ? new Date(person.demissionDate)
+              : null,
           });
         } else {
           await PersonService.addPerson({
@@ -136,115 +141,104 @@ export default function FormUser({
           {action === "form" ? (
             <>
               <form>
-                <div className={styles.containerInput}>
-                  <label htmlFor="name">Nome completo*</label>
-                  <input
-                    type="text"
-                    name="name"
-                    id="name"
-                    placeholder="Digite o seu nome completo"
-                    value={person?.name}
-                    onChange={(e) =>
-                      setPerson((oldPerson) => ({
-                        ...oldPerson,
-                        name: e.target.value,
-                      }))
-                    }
-                  />
-                </div>
-                <div className={styles.containerInput}>
-                  <label htmlFor="name">CPF*</label>
-                  <ReactInputMask
-                    mask="999.999.999-99"
-                    type="text"
-                    name="cpf"
-                    id="cpf"
-                    placeholder="Digite o seu CPF"
-                    value={person?.cpf}
-                    onChange={(e) =>
-                      setPerson((oldPerson) => ({
-                        ...oldPerson,
-                        cpf: e.target.value,
-                      }))
-                    }
-                  />
-                </div>
-                <div className={styles.containerInput}>
-                  <label htmlFor="contactPhone">Telefone do colaborador*</label>
-                  <ReactInputMask
-                    mask="(99) 99999-9999"
-                    type="tel"
-                    name="contactPhone"
-                    id="contactPhone"
-                    placeholder="Digite o seu telefone"
-                    value={person?.contactPhone}
-                    onChange={(e) =>
-                      setPerson((oldPerson) => ({
-                        ...oldPerson,
-                        contactPhone: e.target.value,
-                      }))
-                    }
-                  />
-                </div>
-                <div className={styles.containerInput}>
-                  <label htmlFor="cpts">Número da carteira de trabalho*</label>
-                  <input
-                    type="text"
-                    name="cpts"
-                    id="cpts"
-                    placeholder="Digite o número da sua carteira de trabalho"
-                    minLength={8}
-                    maxLength={8}
-                    value={person?.ctps}
-                    onChange={(e) =>
-                      setPerson((oldPerson) => ({
-                        ...oldPerson,
-                        ctps: e.target.value,
-                      }))
-                    }
-                  />
-                </div>
-                <div className={styles.containerInput}>
-                  <label htmlFor="admissionDate">Data de admissão*</label>
-                  <input
+                <Input
+                  label="Nome Completo*"
+                  type="text"
+                  name="name"
+                  placeholder="Digite o seu nome completo"
+                  value={person?.name}
+                  onChangeInputValue={(value) =>
+                    setPerson((oldPerson) => ({
+                      ...oldPerson,
+                      name: value,
+                    }))
+                  }
+                />
+                <Input
+                  label="CPF*"
+                  mask="999.999.999-99"
+                  type="text"
+                  name="cpf"
+                  id="cpf"
+                  placeholder="Digite o seu CPF"
+                  value={person?.cpf}
+                  onChangeInputValue={(value) =>
+                    setPerson((oldPerson) => ({
+                      ...oldPerson,
+                      cpf: value,
+                    }))
+                  }
+                />
+                <Input
+                  label="Telefone do colaborador*"
+                  mask="(99) 99999-9999"
+                  type="tel"
+                  name="contactPhone"
+                  id="contactPhone"
+                  placeholder="Digite o seu telefone"
+                  value={person?.contactPhone}
+                  onChangeInputValue={(value) =>
+                    setPerson((oldPerson) => ({
+                      ...oldPerson,
+                      contactPhone: value,
+                    }))
+                  }
+                />
+
+                <Input
+                  label="Número da carteira de trabalho*"
+                  type="text"
+                  name="cpts"
+                  id="cpts"
+                  placeholder="Digite o número da sua carteira de trabalho"
+                  minLength={8}
+                  maxLength={8}
+                  value={person?.ctps}
+                  onChangeInputValue={(value) =>
+                    setPerson((oldPerson) => ({
+                      ...oldPerson,
+                      ctps: value,
+                    }))
+                  }
+                />
+                <Input
+                  label="Data de admissão*"
+                  type="date"
+                  name="admissionDate"
+                  id="admissionDate"
+                  placeholder="Digite a data de admissão"
+                  value={
+                    person?.admissionDate
+                      ? new Date(person?.admissionDate).toISOString()
+                      : undefined
+                  }
+                  onChangeInputValue={(value) =>
+                    setPerson((oldPerson) => ({
+                      ...oldPerson,
+                      admissionDate: value,
+                    }))
+                  }
+                />
+
+                {person.id ? (
+                  <Input
+                    label="Data de demissão"
                     type="date"
-                    name="admissionDate"
-                    id="admissionDate"
-                    placeholder="Digite a data de admissão"
+                    name="demissionDate"
+                    id="demissionDate"
+                    placeholder="Digite a data de demissão"
                     value={
-                      person?.admissionDate
-                        ? new Date(person?.admissionDate).toISOString()
+                      person.demissionDate
+                        ? new Date(person?.demissionDate).toISOString()
                         : undefined
                     }
-                    onChange={(e) =>
+                    onChangeInputValue={(value) =>
                       setPerson((oldPerson) => ({
                         ...oldPerson,
-                        admissionDate: e.target.value,
+                        demissionDate: value,
                       }))
                     }
                   />
-                </div>
-                {person.id ? (
-                  <div className={styles.containerInput}>
-                    <label htmlFor="demissionDate">Data de demissão</label>
-                    <input
-                      type="date"
-                      name="demissionDate"
-                      id="demissionDate"
-                      placeholder="Digite a data de demissão"
-                      value={
-                        person.demissionDate
-                          ? new Date(person?.demissionDate).toISOString()
-                          : undefined
-                      }
-                      onChange={(e) =>
-                        setPerson((oldPerson) => ({
-                          ...oldPerson,
-                          demissionDate: e.target.value,
-                        }))
-                      }
-                    />
-                  </div>
                 ) : undefined}
                 <div className={styles.containerInput}>
                   <label htmlFor="role">Cargo atual*</label>
@@ -282,87 +276,77 @@ export default function FormUser({
                     <option value="external">Externo(a)</option>
                   </select>
                 </div>
-                <div className={styles.containerInput}>
-                  <label htmlFor="street">Rua*</label>
-                  <input
-                    type="text"
-                    name="street"
-                    id="street"
-                    placeholder="Digite o nome da rua"
-                    value={person?.street}
-                    onChange={(e) =>
-                      setPerson((oldPerson) => ({
-                        ...oldPerson,
-                        street: e.target.value,
-                      }))
-                    }
-                  />
-                </div>
-                <div className={styles.containerInput}>
-                  <label htmlFor="neighborhood">Bairro*</label>
-                  <input
-                    type="text"
-                    name="neighborhood"
-                    id="neighborhood"
-                    placeholder="Digite o nome do bairro"
-                    value={person?.neighborhood}
-                    onChange={(e) =>
-                      setPerson((oldPerson) => ({
-                        ...oldPerson,
-                        neighborhood: e.target.value,
-                      }))
-                    }
-                  />
-                </div>
-                <div className={styles.containerInput}>
-                  <label htmlFor="city">Cidade*</label>
-                  <input
-                    type="text"
-                    name="city"
-                    id="city"
-                    placeholder="DIgite o nome da cidade"
-                    value={person?.city}
-                    onChange={(e) =>
-                      setPerson((oldPerson) => ({
-                        ...oldPerson,
-                        city: e.target.value,
-                      }))
-                    }
-                  />
-                </div>
-                <div className={styles.containerInput}>
-                  <label htmlFor="number">Número*</label>
-                  <input
-                    type="number"
-                    name="number"
-                    id="number"
-                    placeholder="Digite o número"
-                    value={person?.number}
-                    onChange={(e) =>
-                      setPerson((oldPerson) => ({
-                        ...oldPerson,
-                        number: e.target.value,
-                      }))
-                    }
-                  />
-                </div>
-                <div className={styles.containerInput}>
-                  <label htmlFor="postalCode">CEP*</label>
-                  <ReactInputMask
-                    mask="99999-999"
-                    type="text"
-                    name="postalCode"
-                    id="postalCode"
-                    placeholder="Digite o CEP"
-                    value={person?.postalCode}
-                    onChange={(e) =>
-                      setPerson((oldPerson) => ({
-                        ...oldPerson,
-                        postalCode: e.target.value,
-                      }))
-                    }
-                  />
-                </div>
+                <Input
+                  label="Rua*"
+                  type="text"
+                  name="street"
+                  id="street"
+                  placeholder="Digite o nome da rua"
+                  value={person?.street}
+                  onChangeInputValue={(value) =>
+                    setPerson((oldPerson) => ({
+                      ...oldPerson,
+                      street: value,
+                    }))
+                  }
+                />
+                <Input
+                  label="Bairro*"
+                  type="text"
+                  name="neighborhood"
+                  id="neighborhood"
+                  placeholder="Digite o nome do bairro"
+                  value={person?.neighborhood}
+                  onChangeInputValue={(value) =>
+                    setPerson((oldPerson) => ({
+                      ...oldPerson,
+                      neighborhood: value,
+                    }))
+                  }
+                />
+                <Input
+                  label="Cidade*"
+                  type="text"
+                  name="city"
+                  id="city"
+                  placeholder="DIgite o nome da cidade"
+                  value={person?.city}
+                  onChangeInputValue={(value) =>
+                    setPerson((oldPerson) => ({
+                      ...oldPerson,
+                      city: value,
+                    }))
+                  }
+                />
+                <Input
+                  label="Número*"
+                  type="number"
+                  name="number"
+                  id="number"
+                  placeholder="Digite o número"
+                  value={person?.number}
+                  onChangeInputValue={(value) =>
+                    setPerson((oldPerson) => ({
+                      ...oldPerson,
+                      number: value,
+                    }))
+                  }
+                />
+                <Input
+                  label="CEP*"
+                  mask="99999-999"
+                  type="text"
+                  name="postalCode"
+                  id="postalCode"
+                  placeholder="Digite o CEP"
+                  value={person?.postalCode}
+                  onChangeInputValue={(value) =>
+                    setPerson((oldPerson) => ({
+                      ...oldPerson,
+                      postalCode: value,
+                    }))
+                  }
+                />
               </form>
               <div className={styles.cardFooter}>
                 <button onClick={() => handlerSubmitFormUser()}>Salvar</button>
