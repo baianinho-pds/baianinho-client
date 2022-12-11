@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ReactInputMask from "react-input-mask";
 import styles from "./input.module.css";
 
@@ -20,7 +20,11 @@ export function Input({
   maxLength,
   onChangeInputValue,
 }: InputProps) {
+  const [inputValue, setInputValue] = useState(value);
+
+  useEffect(() => {
     setInputValue(value);
+  }, [value]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
