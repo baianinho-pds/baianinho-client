@@ -127,6 +127,7 @@ export default function Users() {
             setIsFormUserOpen(false);
             setIsDeleteUserAlertOpen(false);
             setPersonIdToUpdate(undefined);
+
             if (requestFetchData) {
               fetchPersons();
               setModalMessageAlertState(true);

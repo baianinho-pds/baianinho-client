@@ -1,9 +1,10 @@
 export type FeedStock = {
   id: number
   name: string
-  supplies_type: string
+  suppliesType: string
   provider: string
   unit: string
-  amount?: number
-  validity: string | undefined
+  amount?: number | null
+  validity?: Date | null
+  products?: number[]
 }

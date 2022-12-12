@@ -1,4 +1,4 @@
-import { Person } from "../models/person";
+import { Person } from "../interfaces/person";
 import { Api } from "./api";
 
 type Page<T> = {

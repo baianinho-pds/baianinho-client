@@ -1,4 +1,4 @@
-import { Product } from "../models/product";
+import { Product } from "../interfaces/product";
 import { Api } from "./api";
 
 type Page<T> = {

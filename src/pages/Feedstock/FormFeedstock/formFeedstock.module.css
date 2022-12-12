@@ -16,50 +16,50 @@
 }
 
 .containerInput {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .containerInput label {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    color: #222;
-    padding: 5px 0;
-  }
-  
-  .containerInput input,
-  .containerInput select {
-    padding: 10px 15px;
-    width: 100%;
-    border: 1px solid #222;
-    border-radius: 2px;
-    font-family: "Imprima";
-  }
-  
-  .containerInput input::placeholder,
-  .containerInput select::placeholder {
-    font-family: "Imprima";
-  }
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.containerInput label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #222;
+  padding: 5px 0;
+}
+
+.containerInput input,
+.containerInput select {
+  padding: 10px 15px;
+  width: 100%;
+  border: 1px solid #222;
+  border-radius: 2px;
+  font-family: "Imprima";
+}
+
+.containerInput input::placeholder,
+.containerInput select::placeholder {
+  font-family: "Imprima";
+}
 
 .cardHeader {
-    padding: 10px 30px;
-    text-align: center;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .cardHeader h2 {
-    flex: 1;
-  }
-  
-  .cardHeader svg {
-    cursor: pointer;
-  }
+  padding: 10px 30px;
+  text-align: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cardHeader h2 {
+  flex: 1;
+}
+
+.cardHeader svg {
+  cursor: pointer;
+}
 
 .containerMateriaPrimaInfo {
   width: 100%;
@@ -133,4 +133,9 @@
 .cardFooter button:hover {
   background: green;
   color: #fff;
+}
+
+.containerSelect {
+  margin: 20px 0;
+  width: 92%;
 }
