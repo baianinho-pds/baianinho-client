@@ -49,7 +49,6 @@ export default function Feedstock() {
         const feedstockListFiltered = initialFeedstockList.filter((feedstock) =>
           feedstock.name.toLowerCase().includes(term.toLowerCase())
         );
-
         setListaMateriaPrima(feedstockListFiltered);
       } else {
         setSearchFeedstockValue("");
@@ -105,12 +104,25 @@ export default function Feedstock() {
 
                 <div>
                   <table className={styles.table}>
+                    <thead>
+                      <tr>
+                        <th>Nome</th>
+                        <th>Quantidade</th>
+                        <th>Validade</th>
+                        <th colSpan={2}>Ações</th>
+                      </tr>
+                    </thead>
                     <tbody>
                       {listaMateriaPrima.map((materiaPrima) => (
                         <tr key={materiaPrima.id}>
                           <td>{materiaPrima.name}</td>
+                          <td>{materiaPrima.amount || 0}</td>
                           <td style={{ width: "20%" }}>
-                            {getFormattedDate(new Date(materiaPrima.validity))}
+                            {materiaPrima.validity
+                              ? getFormattedDate(
+                                  new Date(materiaPrima.validity)
+                                )
+                              : undefined}
                           </td>
                           <td>
                             <FiEdit2

@@ -1,11 +1,11 @@
-import styles from "./produtos.module.css";
+import styles from "./products.module.css";
 import { FiEdit2, FiTrash, FiSearch, FiUser } from "react-icons/fi";
 import { useCallback, useEffect, useState } from "react";
 import Loading from "../../components/Loader";
-import { FindPageResponse, ProductService } from "../../services/product";
+import { ProductService } from "../../services/product";
 import { toast } from "react-toastify";
 import MessageAlert from "../../components/MessageAlert";
-import FormProdutos from "./FormProdutos";
+import FormProdutos from "./FormProduct";
 import { Product } from "../../interfaces/product";
 
 export default function Products() {
@@ -15,9 +15,7 @@ export default function Products() {
   const [isDeleteProductAlertOpen, setIsDeleteProductAlertOpen] =
     useState(false);
   const [modalMessageAlertState, setModalMessageAlertState] = useState(false);
-  const [initialProductList, setInitialProductList] = useState<
-    Product[]
-  >([]);
+  const [initialProductList, setInitialProductList] = useState<Product[]>([]);
   const [productList, setProductList] = useState<Product[]>([]);
   const [searchValue, setSearchValue] = useState("");
 
@@ -50,7 +48,7 @@ export default function Products() {
     }
   }, [ProductService]);
 
-  const searchProduct = useCallback((term: string) => {
+  const searchProduct = (term: string) => {
     setSearchValue(term);
     clearTimeout(timer);
     timer = setTimeout(() => {
@@ -64,7 +62,7 @@ export default function Products() {
         setProductList(initialProductList);
       }
     }, 500);
-  }, []);
+  };
 
   useEffect(() => {
     fetchProducts();
@@ -81,7 +79,12 @@ export default function Products() {
               <div className={styles.containerTable}>
                 <div className={styles.actions}>
                   <form action="" className={styles.search}>
-                    <input type="text" value={""} placeholder="Pesquisar" />
+                    <input
+                      type="text"
+                      value={searchValue}
+                      onChange={(e) => searchProduct(e.target.value)}
+                      placeholder="Pesquisar"
+                    />
                     <FiSearch size={20} />
                   </form>
 
@@ -96,26 +99,49 @@ export default function Products() {
 
                 <div>
                   <table className={styles.table}>
+                    <thead>
+                      <tr>
+                        <th>N° Lote</th>
+                        <th>Nome</th>
+                        <th>Quantidade</th>
+                        <th>Preço</th>
+                        <th>Validade</th>
+                        <th colSpan={2}>Ações</th>
+                      </tr>
+                    </thead>
                     <tbody>
-                      {productList.map(product => (
+                      {productList.map((product) => (
                         <tr key={product.id}>
                           <td>{product.batchCode}</td>
                           <td>{product.name}</td>
-                          <td>{product.grammage}g</td>
-                          <td>{product.expirationDate ? getFormattedDate(new Date(product.expirationDate)) : undefined}</td>
+                          <td>{product.quantity}</td>
+                          <td>
+                            {new Intl.NumberFormat("pt-BR", {
+                              style: "currency",
+                              currency: "BRL",
+                            }).format(product.price)}
+                          </td>
+                          <td>
+                            {product.expirationDate
+                              ? getFormattedDate(
+                                  new Date(product.expirationDate)
+                                )
+                              : undefined}
+                          </td>
                           <td>
                             <FiEdit2
                               onClick={() => {
-                                setIsFormProductOpen(true)
-                                setProductIdToUpdate(product.id)
+                                setIsFormProductOpen(true);
+                                setProductIdToUpdate(product.id);
                               }}
                             ></FiEdit2>
                           </td>
                           <td>
-                            <FiTrash color="#ff0000" 
+                            <FiTrash
+                              color="#ff0000"
                               onClick={() => {
-                                setProductIdToUpdate(product.id)
-                                setIsDeleteProductAlertOpen(true)
+                                setProductIdToUpdate(product.id);
+                                setIsDeleteProductAlertOpen(true);
                               }}
                             ></FiTrash>
                           </td>

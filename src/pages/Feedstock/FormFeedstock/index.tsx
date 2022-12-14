@@ -257,6 +257,15 @@ function FormMateriaPrima({
                   <span>Selecione os Produtos</span>
                   {materiaPrima.products ? (
                     <Select
+                      maxMenuHeight={100}
+                      styles={{
+                        control: (provided) => ({
+                          ...provided,
+                          border: "1px solid rgba(0,0,0,0.6)",
+                          boxShadow: "none",
+                        }),
+                      }}
+                      placeholder="Selecionar"
                       isMulti={true}
                       value={selectedOption}
                       options={productList}
@@ -287,12 +296,25 @@ function FormMateriaPrima({
 
                     <div className={styles.UserInfo}>
                       <b>Validade: </b>
-                      {/* <span>{materiaPrima.validity}</span> */}
+                      <span>
+                        {materiaPrima.validity
+                          ? new Intl.DateTimeFormat("pt-BR", {
+                              day: "2-digit",
+                              month: "2-digit",
+                              year: "numeric",
+                            }).format(new Date(materiaPrima.validity))
+                          : materiaPrima.validity}
+                      </span>
                     </div>
 
                     <div className={styles.UserInfo}>
                       <b>Unidade de Medida: </b>
                       <span>{materiaPrima.unit}</span>
+                    </div>
+
+                    <div className={styles.UserInfo}>
+                      <b>Quantidade: </b>
+                      <span>{materiaPrima.amount}</span>
                     </div>
                   </div>
                 </div>
@@ -308,7 +330,15 @@ function FormMateriaPrima({
                   >
                     Sim Excluir
                   </button>
-                  <button className={styles.btnCancel}>Cancelar</button>
+                  <button
+                    className={styles.btnCancel}
+                    onClick={() => {
+                      onRequestClose(false);
+                      resetForm();
+                    }}
+                  >
+                    Cancelar
+                  </button>
                 </div>
               </>
             )}

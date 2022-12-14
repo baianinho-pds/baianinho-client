@@ -4,7 +4,7 @@
   left: 50%;
   right: 50%;
   transform: translateX(-50%);
-  background-color: rgb(219, 217, 217);
+  background-color: rgb(235 235 235);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -75,9 +75,9 @@ form {
 .containerInput select {
   padding: 10px 15px;
   width: 100%;
-  border: 1px solid #222;
-  border-radius: 2px;
+  border-radius: 4px;
   font-family: "Imprima";
+  border: 1px solid rgba(0, 0, 0, 0.5);
 }
 
 .containerInput select::placeholder {
@@ -97,7 +97,8 @@ form {
 .cardFooterUserDelete button {
   color: green;
   border: 1px solid green;
-  padding: 5px 20px;
+  padding: 6px 20px;
+  border-radius: 2px;
   font-family: "Imprima";
   transition: all 0.2s;
   cursor: pointer;

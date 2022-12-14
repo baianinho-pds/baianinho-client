@@ -23,5 +23,6 @@
 .header svg {
   font-size: 25px;
   color: #fff;
-  cursor: pointer;
+  cursor: not-allowed;
+  opacity: 0.6;
 }

@@ -36,24 +36,21 @@ export default function Users() {
     }
   }, [PersonService]);
 
-  const searchPerson = useCallback(
-    (term: string) => {
-      setSearchValue(term);
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        if (term.length) {
-          const personListFiltered = initialPersonList.filter((person) =>
-            person.name.toLowerCase().includes(term.toLowerCase())
-          );
-          setPersonList(personListFiltered);
-        } else {
-          setSearchValue("");
-          setPersonList(initialPersonList);
-        }
-      }, 500);
-    },
-    [initialPersonList, timer]
-  );
+  const searchPerson = (term: string) => {
+    setSearchValue(term);
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      if (term.length) {
+        const personListFiltered = initialPersonList.filter((person) =>
+          person.name.toLowerCase().includes(term.toLowerCase())
+        );
+        setPersonList(personListFiltered);
+      } else {
+        setSearchValue("");
+        setPersonList(initialPersonList);
+      }
+    }, 500);
+  };
 
   useEffect(() => {
     fetchPersons();
@@ -88,6 +85,14 @@ export default function Users() {
               </button>
             </div>
             <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Contato</th>
+                  <th colSpan={2}>Ações</th>
+                </tr>
+              </thead>
+
               <tbody>
                 {personList?.map((person) => (
                   <tr key={person.id}>

@@ -24,13 +24,12 @@ type FeedstockList = {
   label: string;
 };
 
-export default function FormProdutos({
+export default function FormProduct({
   isOpen,
   onRequestClose,
   action,
   productId,
 }: FormProductsProps) {
-
   const [selectedOption, setSelectedOption] = useState<
     MultiValue<Record<string, string>>
   >([]);
@@ -49,7 +48,7 @@ export default function FormProdutos({
     batchCode: 0,
     grammage: 0,
     productionDate: null,
-    feedstocks: []
+    feedstocks: [],
   });
 
   const resetForm = () => {
@@ -61,7 +60,7 @@ export default function FormProdutos({
       batchCode: 0,
       grammage: 0,
       productionDate: null,
-      feedstocks: []
+      feedstocks: [],
     });
     setSelectedOption([]);
   };
@@ -75,12 +74,12 @@ export default function FormProdutos({
       if (product.id) {
         await ProductService.updateProduct(product.id, {
           ...product,
-          feedstocks
+          feedstocks,
         });
       } else {
         await ProductService.addProduct({
           ...product,
-          feedstocks
+          feedstocks,
         });
       }
       onRequestClose(true);
@@ -90,7 +89,7 @@ export default function FormProdutos({
         theme: "colored",
       });
     }
-  };
+  }
 
   const handlerDeleteProduct = async () => {
     try {
@@ -120,7 +119,6 @@ export default function FormProdutos({
 
       setSelectedOption(selectedFeedstock);
     }
-
   }, [productId]);
 
   const fetchFeedstockList = useCallback(async () => {
@@ -137,8 +135,8 @@ export default function FormProdutos({
   }, [productId]);
 
   useEffect(() => {
-    fetchProduct()
-    fetchFeedstockList()
+    fetchProduct();
+    fetchFeedstockList();
   }, [fetchProduct]);
 
   return (
@@ -209,7 +207,13 @@ export default function FormProdutos({
                   name="name"
                   id="name"
                   placeholder="Digite a Data de Produção"
-                  value={product?.productionDate ? new Date(product?.productionDate)?.toISOString().split('T')[0] : undefined}
+                  value={
+                    product?.productionDate
+                      ? new Date(product?.productionDate)
+                          ?.toISOString()
+                          .split("T")[0]
+                      : undefined
+                  }
                   onChangeInputValue={(value) =>
                     setProduct((oldProduct) => ({
                       ...oldProduct,
@@ -224,7 +228,13 @@ export default function FormProdutos({
                   name="name"
                   id="name"
                   placeholder="Digite a Data de Validade do Produto"
-                  value={product?.expirationDate ? new Date(product?.expirationDate)?.toISOString().split('T')[0] : undefined}
+                  value={
+                    product?.expirationDate
+                      ? new Date(product?.expirationDate)
+                          ?.toISOString()
+                          .split("T")[0]
+                      : undefined
+                  }
                   onChangeInputValue={(value) =>
                     setProduct((oldProduct) => ({
                       ...oldProduct,
@@ -232,12 +242,50 @@ export default function FormProdutos({
                     }))
                   }
                 />
+
+                <Input
+                  label="Quantidade"
+                  type="number"
+                  name="quantity"
+                  id="quantity"
+                  placeholder="Informe a quantidade"
+                  value={String(product.quantity)}
+                  onChangeInputValue={(value) => {
+                    setProduct((oldProduct) => ({
+                      ...oldProduct,
+                      quantity: parseInt(value),
+                    }));
+                  }}
+                />
+
+                <Input
+                  label="Preço"
+                  type="number"
+                  name="price"
+                  id="price"
+                  placeholder="Informe o Preço"
+                  value={String(product.price)}
+                  onChangeInputValue={(value) => {
+                    setProduct((oldProduct) => ({
+                      ...oldProduct,
+                      price: parseFloat(value),
+                    }));
+                  }}
+                />
               </form>
 
               <div className={styles.containerSelect}>
                 <span>Selecione as matéria-primas</span>
                 {product.feedstocks ? (
                   <Select
+                    maxMenuHeight={100}
+                    styles={{
+                      control: (provided) => ({
+                        ...provided,
+                        border: "1px solid rgba(0,0,0,0.6)",
+                        boxShadow: "none",
+                      }),
+                    }}
                     isMulti={true}
                     value={selectedOption}
                     options={feedstockList}
@@ -247,7 +295,9 @@ export default function FormProdutos({
               </div>
 
               <div className={styles.cardFooter}>
-                <button onClick={() => handlerSubmitFormProduct()}>Salvar</button>
+                <button onClick={() => handlerSubmitFormProduct()}>
+                  Salvar
+                </button>
               </div>
             </>
           ) : action === "delete" ? (
@@ -264,7 +314,7 @@ export default function FormProdutos({
                     <span>{product.batchCode}</span>
                   </div>
 
-                  {/* <div>
+                  <div>
                     <b>Data de Fabricação: </b>
                     <span>
                       {product.productionDate
@@ -272,30 +322,38 @@ export default function FormProdutos({
                             day: "2-digit",
                             month: "2-digit",
                             year: "numeric",
-                          }).format(new Date(product.productionDate).toISOString())
+                          }).format(new Date(product.productionDate))
                         : product.productionDate}
                     </span>
-                  </div> */}
+                  </div>
 
-                  {product.expirationDate ? (
-                    <div>
-                      <b>Data de Validade do Produto: </b>
-                      <span>
-                        {product.expirationDate
-                          ? new Intl.DateTimeFormat("pt-BR", {
-                              day: "2-digit",
-                              month: "2-digit",
-                              year: "numeric",
-                            }).format(new Date(product.expirationDate))
-                          : product.expirationDate}
-                      </span>
-                    </div>
-                  ) : null}
+                  <div>
+                    <b>Data de Validade do Produto: </b>
+                    <span>
+                      {product.expirationDate
+                        ? new Intl.DateTimeFormat("pt-BR", {
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "numeric",
+                          }).format(new Date(product.expirationDate))
+                        : product.expirationDate}
+                    </span>
+                  </div>
 
-                  {/* <div>
+                  <div>
                     <b>Quantidade: </b>
                     <span>{product.quantity}</span>
-                  </div> */}
+                  </div>
+
+                  <div>
+                    <b>Preço: </b>
+                    <span>
+                      {new Intl.NumberFormat("pt-BR", {
+                        style: "currency",
+                        currency: "BRL",
+                      }).format(product.price)}
+                    </span>
+                  </div>
                 </div>
               </div>
               <p className={styles.messageAlert}>
