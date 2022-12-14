@@ -9,7 +9,7 @@ type Page<T> = {
 };
 
 export class FeedStockService {
-  static async addFeedstock(feedStock: Omit<FeedStock, 'id'>) {
+  static async addFeedstock(feedStock: Omit<FeedStock, 'id' | 'products'> & { products: Array<{ id: number }> }) {
     await new Api().post('/feedstock', feedStock)
   }
 
@@ -21,7 +21,7 @@ export class FeedStockService {
     return await new Api().get(`/feedstock/${id}`);
   }
 
-  static async updateFeedstock(id: number, person: Omit<FeedStock, "id">) {
+  static async updateFeedstock(id: number, person: Omit<FeedStock, 'id' | 'products'> & { products: Array<{ id: number }> }) {
     await new Api().put(`/feedstock/${id}`, person);
   }
 

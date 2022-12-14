@@ -1,10 +1,9 @@
 import { useEffect, useState, useCallback } from "react";
 import { GrClose } from "react-icons/gr";
-import Select from "react-select";
+import Select, { MultiValue } from "react-select";
 import { toast, ToastContainer } from "react-toastify";
 import { Input } from "../../../components/Input";
 import { FeedStock } from "../../../interfaces/feedstock";
-import { Product } from "../../../interfaces/product";
 import { FeedStockService } from "../../../services/feedstock";
 import { ProductService } from "../../../services/product";
 import styles from "./formFeedstock.module.css";
@@ -42,12 +41,14 @@ function FormMateriaPrima({
   const [productList, setProductList] = useState<ProductList[]>([]);
 
   const [selectedOption, setSelectedOption] = useState<
-    Record<string, string>[]
+    MultiValue<Record<string, string>>
   >([]);
 
-  const resetForm = () => {
-    console.log("aqui");
+  const onChange = (data: MultiValue<Record<string, string>>) => {
+    setSelectedOption(data);
+  };
 
+  const resetForm = () => {
     setMateriaPrima({
       name: "",
       validity: null,
@@ -62,10 +63,19 @@ function FormMateriaPrima({
 
   async function SalvarMateriaPrima() {
     try {
+      const products = selectedOption.map((product) => ({
+        id: Number(product.value),
+      }));
       if (feedStockId) {
-        await FeedStockService.updateFeedstock(feedStockId, materiaPrima);
+        await FeedStockService.updateFeedstock(feedStockId, {
+          ...materiaPrima,
+          products,
+        });
       } else {
-        await FeedStockService.addFeedstock(materiaPrima);
+        await FeedStockService.addFeedstock({
+          ...materiaPrima,
+          products,
+        });
       }
 
       onRequestClose(true);
@@ -103,6 +113,13 @@ function FormMateriaPrima({
             ? new Date(fetchedFeedstock?.validity)
             : null,
         });
+
+        const selectedProducts = fetchedFeedstock.products.map((product) => ({
+          value: String(product.id),
+          label: product.name,
+        }));
+
+        setSelectedOption(selectedProducts);
       }
     }
   }, [feedStockId]);
@@ -115,22 +132,13 @@ function FormMateriaPrima({
         label: product.name,
       }));
       setProductList(products);
-      if (feedStockId) {
-        const filteredProducts = fetchedProducts.data
-          .filter((product) => product.id === feedStockId)
-          .map((product) => ({
-            value: String(product.id),
-            label: product.name,
-          }));
-        setSelectedOption(filteredProducts);
-      }
     }
   }, [feedStockId]);
 
   useEffect(() => {
     fetchFeedstock();
     fetchProductsList();
-  }, [fetchFeedstock, fetchProductsList]);
+  }, [fetchFeedstock]);
 
   return (
     <>
@@ -147,7 +155,6 @@ function FormMateriaPrima({
                 }}
               />
             </div>
-
             {action === "form" && (
               <>
                 <form>
@@ -248,12 +255,14 @@ function FormMateriaPrima({
                 </form>
                 <div className={styles.containerSelect}>
                   <span>Selecione os Produtos</span>
-                  <Select
-                    isMulti={true}
-                    defaultValue={selectedOption}
-                    options={productList}
-                    onChange={setSelectedOption}
-                  />
+                  {materiaPrima.products ? (
+                    <Select
+                      isMulti={true}
+                      value={selectedOption}
+                      options={productList}
+                      onChange={onChange}
+                    />
+                  ) : undefined}
                 </div>
 
                 <div className={styles.cardFooter}>
