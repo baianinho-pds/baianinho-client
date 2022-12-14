@@ -1,11 +1,10 @@
 export interface Product {
-    id: number;
-    name: string;
-    loteNumber: string;
-    productWeight: number;
-    price: number;
-    quantity: number;
-    created_at: string;
-    expiration_date: string;
-    updated_at: string;
+    id: number
+    name: string
+    batchCode: number
+    grammage: number
+    quantity: number
+    price: number
+    productionDate: Date | null
+    expirationDate: Date | null
 }

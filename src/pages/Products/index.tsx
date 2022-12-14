@@ -5,8 +5,8 @@ import Loading from "../../components/Loader";
 import { FindPageResponse, ProductService } from "../../services/product";
 import { toast } from "react-toastify";
 import MessageAlert from "../../components/MessageAlert";
-import FormMateriaPrima from "../MateriaPrima/FormMateriaPrima";
 import FormProdutos from "./FormProdutos";
+import { Product } from "../../interfaces/product";
 
 export default function Products() {
   const [isLoadingProducts, setIsLoadingProducts] = useState(false);
@@ -16,17 +16,29 @@ export default function Products() {
     useState(false);
   const [modalMessageAlertState, setModalMessageAlertState] = useState(false);
   const [initialProductList, setInitialProductList] = useState<
-    FindPageResponse[]
+    Product[]
   >([]);
-  const [productList, setProductList] = useState<FindPageResponse[]>([]);
+  const [productList, setProductList] = useState<Product[]>([]);
   const [searchValue, setSearchValue] = useState("");
 
   let timer: number | undefined;
 
+  const getFormattedDate = (date: string | Date | undefined) => {
+    if (date) {
+      return new Date(date)
+        .toISOString()
+        ?.split("T")[0]
+        .split("-")
+        .reverse()
+        .join("/");
+    }
+  };
+
   const fetchProducts = useCallback(async () => {
     setIsLoadingProducts(true);
     try {
-      const response = await ProductService.findMany();
+      const queryParams = `?itemsPerPage=100&page=1`;
+      const response = await ProductService.findMany(queryParams);
       setProductList(response.data);
       setInitialProductList(response.data);
     } catch (error) {
@@ -84,64 +96,32 @@ export default function Products() {
 
                 <div>
                   <table className={styles.table}>
-                    <tr>
-                      <td>Número do Lote</td>
-                      <td>Nome do produto</td>
-                      <td>Gramatura</td>
-                      <td>Data de produção</td>
-                      <td>Validade</td>
-                      <td>
-                        <FiEdit2></FiEdit2>
-                      </td>
-                      <td>
-                        <FiTrash color="#ff0000"></FiTrash>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Número do Lote</td>
-                      <td>Nome do produto</td>
-                      <td>Gramatura</td>
-                      <td>Data de produção</td>
-                      <td>Validade</td>
-                      <td>
-                        <FiEdit2></FiEdit2>
-                      </td>
-                      <td>
-                        <FiTrash color="#ff0000"></FiTrash>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Número do Lote</td>
-                      <td>Nome do produto</td>
-                      <td>Gramatura</td>
-                      <td>Data de produção</td>
-                      <td>Validade</td>
-                      <td>
-                        <FiEdit2></FiEdit2>
-                      </td>
-                      <td>
-                        <FiTrash
-                          onClick={() => {
-                            // setProductIdToUpdate(product.id)
-                            setIsDeleteProductAlertOpen(true);
-                          }}
-                          color="#ff0000"
-                        ></FiTrash>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Número do Lote</td>
-                      <td>Nome do produto</td>
-                      <td>Gramatura</td>
-                      <td>Data de produção</td>
-                      <td>Validade</td>
-                      <td>
-                        <FiEdit2></FiEdit2>
-                      </td>
-                      <td>
-                        <FiTrash color="#ff0000"></FiTrash>
-                      </td>
-                    </tr>
+                    <tbody>
+                      {productList.map(product => (
+                        <tr key={product.id}>
+                          <td>{product.batchCode}</td>
+                          <td>{product.name}</td>
+                          <td>{product.grammage}g</td>
+                          <td>{product.expirationDate ? getFormattedDate(new Date(product.expirationDate)) : undefined}</td>
+                          <td>
+                            <FiEdit2
+                              onClick={() => {
+                                setIsFormProductOpen(true)
+                                setProductIdToUpdate(product.id)
+                              }}
+                            ></FiEdit2>
+                          </td>
+                          <td>
+                            <FiTrash color="#ff0000" 
+                              onClick={() => {
+                                setProductIdToUpdate(product.id)
+                                setIsDeleteProductAlertOpen(true)
+                              }}
+                            ></FiTrash>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
                   </table>
                 </div>
               </div>

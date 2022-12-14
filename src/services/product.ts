@@ -13,8 +13,8 @@ export class ProductService {
     await new Api().post("/product", product);
   }
 
-  static async findMany(): Promise<Page<FindPageResponse>> {
-    return await new Api().get("/product");
+  static async findMany(queryParams?: string): Promise<Page<Product>> {
+    return await new Api().get(`/product?${queryParams}`);
   }
 
   static async findOne(id: number): Promise<Product> {

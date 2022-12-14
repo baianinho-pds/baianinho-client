@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { GrClose } from "react-icons/gr";
 import { toast, ToastContainer } from "react-toastify";
-import { Product } from "../../../models/product";
+import { Input } from "../../../components/Input";
+import { Product } from "../../../interfaces/product";
 import { ProductService } from "../../../services/product";
 import styles from "./formProdutos.module.css";
 
@@ -25,45 +26,43 @@ export default function FormProdutos({
   const [product, setProduct] = useState<ProductFormParams>({
     name: "",
     price: 0,
-    created_at: "",
-    updated_at: "",
-    expiration_date: "",
+    expirationDate: null,
     quantity: 0,
-    loteNumber: "",
-    productWeight: 0,
+    batchCode: 0,
+    grammage: 0,
+    productionDate: null
   });
 
   const resetForm = () => {
     setProduct({
       name: "",
       price: 0,
-      created_at: "",
-      updated_at: "",
-      expiration_date: "",
+      expirationDate: null,
       quantity: 0,
-      loteNumber: "",
-      productWeight: 0,
+      batchCode: 0,
+      grammage: 0,
+      productionDate: null
     });
+  };
 
-    const handlerSubmitFormProduct = async () => {
-      try {
-        if (product.id) {
-          await ProductService.updateProduct(product.id, {
-            ...product,
-          });
-        } else {
-          await ProductService.addProduct({
-            ...product,
-          });
-        }
-        onRequestClose(true);
-        resetForm();
-      } catch (error) {
-        toast.error("Verifique todos os campos ou tente novamente mais tarde", {
-          theme: "colored",
+  async function handlerSubmitFormProduct() {
+    try {
+      if (product.id) {
+        await ProductService.updateProduct(product.id, {
+          ...product,
+        });
+      } else {
+        await ProductService.addProduct({
+          ...product,
         });
       }
-    };
+      onRequestClose(true);
+      resetForm();
+    } catch (error) {
+      toast.error("Verifique todos os campos ou tente novamente mais tarde", {
+        theme: "colored",
+      });
+    }
   };
 
   const handlerDeleteProduct = async () => {
@@ -90,7 +89,7 @@ export default function FormProdutos({
   }, [productId]);
 
   useEffect(() => {
-    fetchProduct();
+    fetchProduct()
   }, [fetchProduct]);
 
   return (
@@ -110,93 +109,83 @@ export default function FormProdutos({
           {action === "form" ? (
             <>
               <form>
-                <div className={styles.containerInput}>
-                  <label htmlFor="name">Nome do produto*</label>
-                  <input
-                    type="text"
-                    name="name"
-                    id="name"
-                    placeholder="Digite o Nome do Produto"
-                    value={product?.name}
-                    onChange={(e) =>
-                      setProduct((oldProduct) => ({
-                        ...oldProduct,
-                        name: e.target.value,
-                      }))
-                    }
-                  />
-                </div>
+                <Input
+                  label="Nome do produto*"
+                  type="text"
+                  name="name"
+                  id="name"
+                  placeholder="Digite o Nome do Produto"
+                  value={product?.name}
+                  onChangeInputValue={(value) =>
+                    setProduct((oldProduct) => ({
+                      ...oldProduct,
+                      name: value,
+                    }))
+                  }
+                />
 
-                <div className={styles.containerInput}>
-                  <label htmlFor="name">Número do Lote*</label>
-                  <input
-                    type="text"
-                    name="name"
-                    id="name"
-                    placeholder="Digite o Número do Lote"
-                    value={product?.loteNumber}
-                    onChange={(e) =>
-                      setProduct((oldProduct) => ({
-                        ...oldProduct,
-                        loteNumber: e.target.value,
-                      }))
-                    }
-                  />
-                </div>
+                <Input
+                  label="Número do Lote*"
+                  type="number"
+                  name="name"
+                  id="name"
+                  placeholder="Digite o Número do Lote"
+                  value={String(product?.batchCode)}
+                  onChangeInputValue={(value) =>
+                    setProduct((oldProduct) => ({
+                      ...oldProduct,
+                      batchCode: Number(value),
+                    }))
+                  }
+                />
 
-                <div className={styles.containerInput}>
-                  <label htmlFor="name">Gramatura do Produto*</label>
-                  <input
-                    type="number"
-                    name="name"
-                    id="name"
-                    placeholder="Digite a Gramatura do Produto"
-                    value={product?.productWeight}
-                    onChange={(e) =>
-                      setProduct((oldProduct) => ({
-                        ...oldProduct,
-                        productWeight: parseInt(e.target.value),
-                      }))
-                    }
-                  />
-                </div>
+                <Input
+                  label="Gramatura do Produto*"
+                  type="number"
+                  name="name"
+                  id="name"
+                  placeholder="Digite a Gramatura do Produto"
+                  value={String(product?.grammage)}
+                  onChangeInputValue={(value) =>
+                    setProduct((oldProduct) => ({
+                      ...oldProduct,
+                      grammage: parseInt(value),
+                    }))
+                  }
+                />
 
-                <div className={styles.containerInput}>
-                  <label htmlFor="name">Data de Produção*</label>
-                  <input
-                    type="date"
-                    name="name"
-                    id="name"
-                    placeholder="Digite a Data de Produção"
-                    value={product?.created_at}
-                    onChange={(e) =>
-                      setProduct((oldProduct) => ({
-                        ...oldProduct,
-                        created_at: e.target.value,
-                      }))
-                    }
-                  />
-                </div>
+                <Input
+                  label="Data de Produção*"
+                  type="date"
+                  name="name"
+                  id="name"
+                  placeholder="Digite a Data de Produção"
+                  value={product?.productionDate ? new Date(product?.productionDate)?.toISOString().split('T')[0] : undefined}
+                  onChangeInputValue={(value) =>
+                    setProduct((oldProduct) => ({
+                      ...oldProduct,
+                      productionDate: new Date(value),
+                    }))
+                  }
+                />
 
-                <div className={styles.containerInput}>
-                  <label htmlFor="name">Data de Validade do Produto*</label>
-                  <input
-                    type="date"
-                    name="name"
-                    id="name"
-                    placeholder="Digite a Data de Validade do Produto"
-                    value={product?.expiration_date}
-                    onChange={(e) =>
-                      setProduct((oldProduct) => ({
-                        ...oldProduct,
-                        expiration_date: e.target.value,
-                      }))
-                    }
-                  />
-                </div>
+                <Input
+                  label="Data de Validade do Produto*"
+                  type="date"
+                  name="name"
+                  id="name"
+                  placeholder="Digite a Data de Validade do Produto"
+                  value={product?.expirationDate ? new Date(product?.expirationDate)?.toISOString().split('T')[0] : undefined}
+                  onChangeInputValue={(value) =>
+                    setProduct((oldProduct) => ({
+                      ...oldProduct,
+                      expirationDate: new Date(value),
+                    }))
+                  }
+                />
               </form>
               <div className={styles.cardFooter}>
-                <button>Salvar</button>
+                <button onClick={() => handlerSubmitFormProduct()}>Salvar</button>
               </div>
             </>
           ) : action === "delete" ? (
@@ -210,41 +199,41 @@ export default function FormProdutos({
 
                   <div>
                     <b>Lote do Produto: </b>
-                    <span>{product.loteNumber}</span>
+                    <span>{product.batchCode}</span>
                   </div>
 
-                  <div>
+                  {/* <div>
                     <b>Data de Fabricação: </b>
                     <span>
-                      {product.created_at
+                      {product.productionDate
                         ? new Intl.DateTimeFormat("pt-BR", {
                             day: "2-digit",
                             month: "2-digit",
                             year: "numeric",
-                          }).format(new Date(product.created_at))
-                        : product.created_at}
+                          }).format(new Date(product.productionDate).toISOString())
+                        : product.productionDate}
                     </span>
-                  </div>
+                  </div> */}
 
-                  {product.expiration_date ? (
+                  {product.expirationDate ? (
                     <div>
                       <b>Data de Validade do Produto: </b>
                       <span>
-                        {product.expiration_date
+                        {product.expirationDate
                           ? new Intl.DateTimeFormat("pt-BR", {
                               day: "2-digit",
                               month: "2-digit",
                               year: "numeric",
-                            }).format(new Date(product.expiration_date))
-                          : product.expiration_date}
+                            }).format(new Date(product.expirationDate))
+                          : product.expirationDate}
                       </span>
                     </div>
                   ) : null}
 
-                  <div>
+                  {/* <div>
                     <b>Quantidade: </b>
                     <span>{product.quantity}</span>
-                  </div>
+                  </div> */}
                 </div>
               </div>
               <p className={styles.messageAlert}>
