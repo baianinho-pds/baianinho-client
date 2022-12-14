@@ -26,7 +26,7 @@ export default function Feedstock() {
   const fetchFeedstock = useCallback(async () => {
     setIsLoadingFeedstock(true);
     try {
-      const queryParams = `?itemsPerPage=10&page=1`;
+      const queryParams = `?itemsPerPage=100&page=1`;
 
       const response = await FeedStockService.findMany(queryParams);
       setListaMateriaPrima(response.data);
