@@ -1,3 +1,5 @@
+import { FeedStock } from "./feedstock"
+
 export interface Product {
     id: number
     name: string
@@ -7,4 +9,5 @@ export interface Product {
     price: number
     productionDate: Date | null
     expirationDate: Date | null
+    feedstocks: FeedStock[]
 }

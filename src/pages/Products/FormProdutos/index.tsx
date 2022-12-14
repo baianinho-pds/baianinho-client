@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 import { GrClose } from "react-icons/gr";
+import Select, { MultiValue } from "react-select";
 import { toast, ToastContainer } from "react-toastify";
 import { Input } from "../../../components/Input";
 import { Product } from "../../../interfaces/product";
+import { FeedStockService } from "../../../services/feedstock";
 import { ProductService } from "../../../services/product";
 import styles from "./formProdutos.module.css";
 
@@ -17,12 +19,28 @@ type ProductFormParams = Omit<Product, "id"> & {
   id?: number;
 };
 
+type FeedstockList = {
+  value: string;
+  label: string;
+};
+
 export default function FormProdutos({
   isOpen,
   onRequestClose,
   action,
   productId,
 }: FormProductsProps) {
+
+  const [selectedOption, setSelectedOption] = useState<
+    MultiValue<Record<string, string>>
+  >([]);
+
+  const [feedstockList, setFeedstockList] = useState<FeedstockList[]>([]);
+
+  const onChange = (data: MultiValue<Record<string, string>>) => {
+    setSelectedOption(data);
+  };
+
   const [product, setProduct] = useState<ProductFormParams>({
     name: "",
     price: 0,
@@ -30,7 +48,8 @@ export default function FormProdutos({
     quantity: 0,
     batchCode: 0,
     grammage: 0,
-    productionDate: null
+    productionDate: null,
+    feedstocks: []
   });
 
   const resetForm = () => {
@@ -41,19 +60,27 @@ export default function FormProdutos({
       quantity: 0,
       batchCode: 0,
       grammage: 0,
-      productionDate: null
+      productionDate: null,
+      feedstocks: []
     });
+    setSelectedOption([]);
   };
 
   async function handlerSubmitFormProduct() {
     try {
+      const feedstocks = selectedOption.map((feedstock) => ({
+        id: Number(feedstock.value),
+      }));
+
       if (product.id) {
         await ProductService.updateProduct(product.id, {
           ...product,
+          feedstocks
         });
       } else {
         await ProductService.addProduct({
           ...product,
+          feedstocks
         });
       }
       onRequestClose(true);
@@ -85,11 +112,33 @@ export default function FormProdutos({
       setProduct({
         ...fetchedProduct,
       });
+
+      const selectedFeedstock = fetchedProduct.feedstocks.map((product) => ({
+        value: String(product.id),
+        label: product.name,
+      }));
+
+      setSelectedOption(selectedFeedstock);
+    }
+
+  }, [productId]);
+
+  const fetchFeedstockList = useCallback(async () => {
+    const queryParams = `?itemsPerPage=100&page=1`;
+
+    const fetchedFeedstock = await FeedStockService.findMany(queryParams);
+    if (fetchedFeedstock) {
+      const feedstocks = fetchedFeedstock.data.map((feedstock) => ({
+        value: String(feedstock.id),
+        label: feedstock.name,
+      }));
+      setFeedstockList(feedstocks);
     }
   }, [productId]);
 
   useEffect(() => {
     fetchProduct()
+    fetchFeedstockList()
   }, [fetchProduct]);
 
   return (
@@ -184,6 +233,19 @@ export default function FormProdutos({
                   }
                 />
               </form>
+
+              <div className={styles.containerSelect}>
+                <span>Selecione as matéria-primas</span>
+                {product.feedstocks ? (
+                  <Select
+                    isMulti={true}
+                    value={selectedOption}
+                    options={feedstockList}
+                    onChange={onChange}
+                  />
+                ) : undefined}
+              </div>
+
               <div className={styles.cardFooter}>
                 <button onClick={() => handlerSubmitFormProduct()}>Salvar</button>
               </div>

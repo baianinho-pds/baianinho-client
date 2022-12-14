@@ -9,7 +9,7 @@ type Page<T> = {
 export type FindPageResponse = Pick<Product, "id" | "name">;
 
 export class ProductService {
-  static async addProduct(product: Omit<Product, "id">) {
+  static async addProduct(product: Omit<Product, "id" | "feedstocks"> & { feedstocks: Array<{ id: number }> }) {
     await new Api().post("/product", product);
   }
 
@@ -21,7 +21,7 @@ export class ProductService {
     return await new Api().get(`/product/${id}`);
   }
 
-  static async updateProduct(id: number, product: Omit<Product, "id">) {
+  static async updateProduct(id: number, product: Omit<Product, "id" | "feedstocks"> & { feedstocks: Array<{ id: number }> }) {
     await new Api().put(`/product/${id}`, product);
   }
 
